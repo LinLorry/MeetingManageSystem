@@ -1,6 +1,11 @@
 package cn.edu.ncu.meeting.config;
 
+import cn.edu.ncu.meeting.security.AuthenticationFilter;
+import cn.edu.ncu.meeting.security.AuthenticationProvider;
+import cn.edu.ncu.meeting.security.TokenAuthenticationEntryPoint;
+import cn.edu.ncu.meeting.user.UserService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,9 +19,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenAuthenticationEntryPoint authenticationEntryPoint;
 
-    public WebSecurityConfig(AuthenticationFilter authenticationFilter, TokenAuthenticationEntryPoint authenticationEntryPoint) {
+    private final UserService userService;
+
+    public WebSecurityConfig(AuthenticationFilter authenticationFilter,
+                             TokenAuthenticationEntryPoint authenticationEntryPoint,
+                             UserService userService) {
         this.authenticationFilter = authenticationFilter;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.userService = userService;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(new AuthenticationProvider(userService));
     }
 
     @Override
