@@ -3,6 +3,7 @@ package cn.edu.ncu.meeting.user;
 import cn.edu.ncu.meeting.until.TokenUntil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,8 +46,8 @@ public class UserController {
         String username = request.getString("username");
         String password = request.getString("password");
 
-        User user = userService.getUser(username);
-        if (user != null) {
+        try {
+            User user = userService.loadUserByUsername(username);
             if (userService.checkPassword(user, password)) {
                 response.put("status", 1);
                 response.put("message", "Login success");
@@ -55,7 +56,7 @@ public class UserController {
                 response.put("status", 0);
                 response.put("message", "Wrong password.");
             }
-        } else {
+        } catch (UsernameNotFoundException e) {
             response.put("status", 0);
             response.put("message", "The user doesn't exist.");
         }

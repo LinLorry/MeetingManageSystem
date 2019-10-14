@@ -4,10 +4,12 @@ import cn.edu.ncu.meeting.until.MD5Tool;
 import cn.edu.ncu.meeting.user.model.User;
 import cn.edu.ncu.meeting.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Value("${Manage.salt}")
@@ -39,8 +41,13 @@ public class UserService {
                 MD5Tool.encode(salt + password + salt)) == 0;
     }
 
-    User getUser(String username) {
-        return userRepository.findByUsername(username);
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User doesn't exits.");
+        }
+        return user;
     }
 
 
