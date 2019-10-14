@@ -1,11 +1,11 @@
 package cn.edu.ncu.meeting.user;
 
-import cn.edu.ncu.meeting.until.MD5Tool;
 import cn.edu.ncu.meeting.user.model.User;
 import cn.edu.ncu.meeting.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +14,8 @@ public class UserService implements UserDetailsService {
 
     @Value("${Manage.salt}")
     private String salt;
+
+    private static BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -24,7 +26,7 @@ public class UserService implements UserDetailsService {
         if (user != null) {
             return false;
         }
-        String hash = MD5Tool.encode(salt + password + salt);
+        String hash = encode.encode(salt + password + salt);
         user = new User();
 
         user.setUsername(username);
@@ -37,8 +39,7 @@ public class UserService implements UserDetailsService {
     }
 
     boolean checkPassword(User user, String password) {
-        return user.getPassword().compareTo(
-                MD5Tool.encode(salt + password + salt)) == 0;
+        return encode.matches(salt + password + salt, user.getPassword());
     }
 
     @Override
@@ -49,6 +50,4 @@ public class UserService implements UserDetailsService {
         }
         return user;
     }
-
-
 }
