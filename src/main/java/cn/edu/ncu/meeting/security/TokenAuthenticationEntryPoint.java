@@ -1,4 +1,4 @@
-package cn.edu.ncu.meeting.config;
+package cn.edu.ncu.meeting.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
