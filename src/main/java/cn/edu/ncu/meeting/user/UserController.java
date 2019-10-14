@@ -3,6 +3,7 @@ package cn.edu.ncu.meeting.user;
 import cn.edu.ncu.meeting.until.TokenUntil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,4 +64,11 @@ public class UserController {
 
         return response;
     }
+
+    @ResponseBody
+    @GetMapping("profile")
+    public User profile(@RequestBody JSONObject request) {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 }
