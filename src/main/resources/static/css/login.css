@@ -1,0 +1,71 @@
+#loginBox {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    background-color: white;
+
+    padding: 3% 1% 5% 1%;
+
+    outline-style: outset;
+    outline-width: 5px;
+
+    text-align: center;
+
+    width: 20%;
+}
+
+.box {
+    border-style: solid;
+    border-color: rgb(59, 120, 221);
+    border-width: 1px;
+
+    width: 100%;
+
+    height: 41px;
+}
+
+.ico {
+    margin: 0;
+    background-repeat: no-repeat;
+    width: 10%;
+    height: 21px;
+    margin: 10px 5% 5px 5%;
+    float: left;
+}
+
+.input {
+    float: left;
+    height: 100%;
+    width: 80%;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: 0;
+}
+
+.flu {
+    z-index: -1;
+    height: 25px;
+}
+
+#icon-user {
+    background-image: url(../img/ico-user.png);
+}
+
+#icon-lock {
+    background-image: url(../img/ico-password.png);
+}
+
+#loginSubmit {
+    margin-top: 20px;
+    outline-style: none;
+    border-style: none;
+    background-color: rgb(59, 120, 221);
+    color: white;
+
+    width: 50%;
+
+    padding: 3px 12px 3px 12px;
+}
