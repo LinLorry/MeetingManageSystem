@@ -7,6 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * User Controller
+ * @author lorry
+ * @author lin864464995@163.com
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -19,6 +24,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Registry api
+     * @param request {
+     *      "username": username: String,
+     *      "password": password: String,
+     *      "name": name: String
+     * }
+     * @return if registry success return {
+     *     "status": 1,
+     *     "message": "Create User Success"
+     * } else return {
+     *     "status: 0,
+     *     "message": message: String
+     * }
+     */
     @ResponseBody
     @PostMapping("/registry")
     public JSONObject registry(@RequestBody JSONObject request) {
@@ -39,6 +59,21 @@ public class UserController {
         return response;
     }
 
+    /**
+     * User login, get token api
+     * @param request {
+     *      "username": username: String,
+     *      "password": password: String,
+     * }
+     * @return if login success return {
+     *     "status": 1,
+     *     "message": "Login success",
+     *     "token": token: String
+     * } else return {
+     *     "status": 0,
+     *     "message": message: String
+     * }
+     */
     @ResponseBody
     @PostMapping("/token")
     public JSONObject token(@RequestBody JSONObject request) {
@@ -65,6 +100,10 @@ public class UserController {
         return response;
     }
 
+    /**
+     * Get user self profile api.
+     * @return user profile.
+     */
     @ResponseBody
     @GetMapping("profile")
     public User profile() {
