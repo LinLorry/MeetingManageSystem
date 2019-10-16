@@ -20,11 +20,6 @@ public class AuthenticationProvider extends DaoAuthenticationProvider {
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        return super.authenticate(authentication);
-    }
-
-    @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {
             this.logger.debug("Authentication failed: no credentials provided");
