@@ -10,8 +10,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author lin864464995@163.com
  * @see org.springframework.data.repository.CrudRepository
  */
-public interface UserRepository extends CrudRepository<User, UserKey> {
-    User findById(Integer id);
-
+public interface UserRepository extends CrudRepository<User, Integer> {
     User findByUsername(String username);
 }
