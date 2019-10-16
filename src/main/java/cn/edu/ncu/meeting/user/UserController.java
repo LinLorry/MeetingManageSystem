@@ -111,12 +111,23 @@ public class UserController {
 
     /**
      * Get user self profile api.
-     * @return user profile.
+     * @return {
+     *     "status": 1,
+     *     "message": "Get profile success.",
+     *     "data": {
+     *         "username": username: String,
+     *         "name": name: String
+     *     }
+     * }
      */
     @ResponseBody
     @GetMapping("/profile")
-    public User profile() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public JSONObject getProfile() {
+        JSONObject response = new JSONObject();
+        response.put("status", 1);
+        response.put("message", "Get profile success.");
+        response.put("data", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return response;
     }
 
     /**
