@@ -3,6 +3,8 @@ package cn.edu.ncu.meeting.user;
 import cn.edu.ncu.meeting.until.TokenUntil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    private final Log logger = LogFactory.getLog(this.getClass());
     private final TokenUntil tokenUntil;
 
     private final UserService userService;
