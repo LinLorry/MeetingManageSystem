@@ -48,6 +48,28 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * Check User exists by username
+     * @param username the username
+     * @return if user exists return true else return false.
+     */
+    boolean checkUserByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    /**
+     * Update User
+     * @param user the user will be update
+     * @param name the user name.
+     */
+    void updateUser(User user, String name) {
+        if (name != null) {
+            user.setName(name);
+        }
+
+        userRepository.save(user);
+    }
+
+    /**
      * Check User password.
      * @param user be checked user.
      * @param password be checked password.
@@ -55,15 +77,6 @@ public class UserService implements UserDetailsService {
      */
     boolean checkPassword(User user, String password) {
         return encode.matches(salt + password + salt, user.getPassword());
-    }
-
-    /**
-     * Check User exists by username
-     * @param username the username
-     * @return if user exists return true else return false.
-     */
-    boolean checkUserByUsername(String username) {
-        return userRepository.existsByUsername(username);
     }
 
     /**

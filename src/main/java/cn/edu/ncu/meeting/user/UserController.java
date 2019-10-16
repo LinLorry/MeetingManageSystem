@@ -131,6 +131,45 @@ public class UserController {
     }
 
     /**
+     * Update user profile api.
+     * @param request {
+     *      "name": name: String
+     * }
+     * @return if update user profile success return {
+     *     "status": 1,
+     *     "message": "Update profile success.",
+     *     "data": {
+     *         "username": username: String,
+     *         "name": name: String
+     *     }
+     * } else return {
+     *     "status": 0,
+     *     "message": "Update profile failed."
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/profile")
+    public JSONObject editProfile(@RequestBody JSONObject request) {
+        JSONObject response = new JSONObject();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            userService.updateUser(
+                    user,
+                    request.getString("name")
+            );
+            response.put("status", 1);
+            response.put("message", "Update profile success.");
+            response.put("data", user);
+        } catch (Exception e) {
+            response.put("status", 0);
+            response.put("message", "Update profile failed.");
+        }
+
+        return response;
+    }
+
+    /**
      * Edit password api.
      * @param request {
      *      "oldPassword": oldPassword: String,
