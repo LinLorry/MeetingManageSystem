@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The user key.
+ * @author lorry
+ * @author lin864464995@163.com
+ */
 @Embeddable
 public class UserKey implements Serializable {
     @Id
