@@ -47,16 +47,22 @@ public class UserController {
     public JSONObject registry(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
 
-        if (userService.addUser(
-                request.getString("username"),
-                request.getString("name"),
-                request.getString("password")
-        )) {
+        try {
+            response.put("data", userService.addUser(
+                    request.getString("username"),
+                    request.getString("name"),
+                    request.getString("password")
+            ));
             response.put("status", 1);
-            response.put("message", "Create User Success");
-        } else {
+            response.put("message", "Registry Success");
+        } catch (Exception e) {
+            logger.error(e);
             response.put("status", 0);
-            response.put("message", "Create User Fail");
+            if (userService.checkUserByUsername(request.getString("username"))) {
+                response.put("message", "UserName Exist.");
+            } else {
+                response.put("message", "Registry Failed.");
+            }
         }
 
         return response;

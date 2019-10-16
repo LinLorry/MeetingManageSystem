@@ -32,23 +32,19 @@ public class UserService implements UserDetailsService {
      * @param username the username.
      * @param name the name.
      * @param password the password.
-     * @return if add user successful return true else return false.
+     * @return new user.
      */
-    boolean addUser(String username, String name, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return false;
-        }
+    User addUser(String username, String name, String password) {
+        User user = new User();
+
         String hash = encode.encode(salt + password + salt);
-        user = new User();
 
         user.setUsername(username);
         user.setName(name);
         user.setPassword(hash);
 
         userRepository.save(user);
-
-        return true;
+        return user;
     }
 
     /**
