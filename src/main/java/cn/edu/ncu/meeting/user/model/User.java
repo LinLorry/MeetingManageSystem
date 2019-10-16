@@ -11,6 +11,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * The User model.
+ * @author lorry
+ * @author lin864464995@163.com
+ * @see org.springframework.security.core.userdetails.UserDetails
+ */
 @Entity
 @IdClass(UserKey.class)
 public class User implements Serializable, UserDetails {
