@@ -114,9 +114,52 @@ public class UserController {
      * @return user profile.
      */
     @ResponseBody
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public User profile() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    /**
+     * Edit password api.
+     * @param request {
+     *      "oldPassword": oldPassword: String,
+     *      "newPassword": newPassword: String
+     * }
+     * @return if edit password success return {
+     *     "status": 1,
+     *     "message": "Edit Password Success"
+     * } else if old password wrong return {
+     *     "status": 0,
+     *     "message": "Old Password Wrong"
+     * } else return {
+     *     "status": 0,
+     *     "message": "Edit Password Failed"
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/password")
+    public JSONObject editPassword(@RequestBody JSONObject request) {
+        JSONObject response = new JSONObject();
+        String oldPassword = request.getString("oldPassword");
+        String newPassword = request.getString("newPassword");
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            if (userService.checkPassword(user, oldPassword)) {
+                userService.updateUserPassword(user, newPassword);
+                response.put("status", 1);
+                response.put("message", "Edit Password Success");
+            } else {
+                response.put("status", 0);
+                response.put("message", "Old Password Wrong");
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            response.put("status", 0);
+            response.put("message", "Edit Password Failed");
+        }
+
+        return response;
+    }
 }

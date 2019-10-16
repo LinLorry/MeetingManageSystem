@@ -67,6 +67,18 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * Update User Password
+     * @param user the user
+     * @param newPassword the new password
+     */
+    void updateUserPassword(User user, String newPassword) {
+        user.setPassword(
+                encode.encode(salt + newPassword.trim() + salt)
+        );
+        userRepository.save(user);
+    }
+
+    /**
      * Load a user by username.
      * @param username the username.
      * @return the user.
