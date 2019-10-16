@@ -62,6 +62,15 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * Check User exists by username
+     * @param username the username
+     * @return if user exists return true else return false.
+     */
+    boolean checkUserByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    /**
      * Load a user by username.
      * @param username the username.
      * @return the user.
