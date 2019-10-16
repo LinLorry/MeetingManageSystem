@@ -33,7 +33,6 @@ public class TokenUntil {
      * @return token.
      */
     public String generateToken(UserDetails userDetails) {
-        System.out.println(passwordField);
         Map<String, Object> claims = new HashMap<>();
         claims.put(passwordField, userDetails.getPassword());
         return doGenerateToken(claims, userDetails.getUsername());
