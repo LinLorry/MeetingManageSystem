@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Token Until
+ * @author lorry
+ * @author lin864464995@163.com
+ */
 @Component
 public class TokenUntil {
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
