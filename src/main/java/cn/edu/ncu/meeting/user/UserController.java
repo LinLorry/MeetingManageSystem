@@ -67,7 +67,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("profile")
-    public User profile(@RequestBody JSONObject request) {
+    public User profile() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
