@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     User addUser(String username, String name, String password) {
         User user = new User();
 
-        String hash = encode.encode(salt + password + salt);
+        String hash = encode.encode(salt + password.trim() + salt);
 
         user.setUsername(username);
         user.setName(name);
