@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The Authentication Filter
+ * set authentication by token.
+ * @author lorry
+ * @author lin864464995@163.com
+ */
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
     @Value("${Manage.AuthenticationName}")
