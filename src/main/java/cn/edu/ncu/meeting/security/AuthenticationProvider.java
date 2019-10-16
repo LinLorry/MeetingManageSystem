@@ -8,6 +8,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+/**
+ * Authentication Provider
+ * @author lorry
+ * @author lin864464995@163.com
+ * @see org.springframework.security.authentication.dao.DaoAuthenticationProvider
+ */
 public class AuthenticationProvider extends DaoAuthenticationProvider {
     public AuthenticationProvider(UserDetailsService userDetailsService) {
         setUserDetailsService(userDetailsService);
