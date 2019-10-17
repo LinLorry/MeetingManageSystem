@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The User model.
@@ -28,6 +29,9 @@ public class User implements Serializable, UserDetails {
 
     @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<UserRole> userRoleSet = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -66,7 +70,7 @@ public class User implements Serializable, UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new HashSet<>();
+        return userRoleSet;
     }
 
     @Override
