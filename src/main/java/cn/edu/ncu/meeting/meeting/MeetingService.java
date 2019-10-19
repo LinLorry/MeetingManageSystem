@@ -51,7 +51,7 @@ public class MeetingService {
         meeting.setNeedName(json.getBooleanValue("needName"));
         meeting.setNeedOrganization(json.getBooleanValue("needOrganization"));
         meeting.setNeedIdCard(json.getBooleanValue("needIdCard"));
-        meeting.setNeedParticipateTime(json.getBooleanValue("needParticipate"));
+        meeting.setNeedParticipateTime(json.getBooleanValue("needParticipateTime"));
         meeting.setNeedGender(json.getBooleanValue("needGender"));
         meeting.setHoldUser(user);
 
