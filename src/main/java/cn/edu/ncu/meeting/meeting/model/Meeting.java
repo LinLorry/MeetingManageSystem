@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -172,5 +173,19 @@ public class Meeting implements Serializable {
 
     public void setJoinUserSet(Set<MeetingJoinUser> joinUserSet) {
         this.joinUserSet = joinUserSet;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        else if (!(obj instanceof Meeting)) return false;
+        Meeting tmp = (Meeting) obj;
+
+        return tmp.getId() == id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
