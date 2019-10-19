@@ -27,6 +27,8 @@ public class UserRole implements GrantedAuthority, Serializable {
     @JoinColumn
     private Role role;
 
+    public UserRole() { }
+
     public UserRole(User user, Role role) {
         this.user = user;
         this.role = role;
