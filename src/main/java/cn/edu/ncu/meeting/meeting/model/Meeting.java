@@ -50,7 +50,7 @@ public class Meeting implements Serializable {
 
     @Column(columnDefinition = "Boolean default false")
     @JsonIgnore
-    private boolean needParticipate = false;
+    private boolean needParticipateTime = false;
 
     @Column(columnDefinition = "Boolean default false")
     @JsonIgnore
@@ -142,12 +142,12 @@ public class Meeting implements Serializable {
         this.needIdCard = needIdCard;
     }
 
-    public boolean isNeedParticipate() {
-        return needParticipate;
+    public boolean isNeedParticipateTime() {
+        return needParticipateTime;
     }
 
-    public void setNeedParticipate(boolean needParticipate) {
-        this.needParticipate = needParticipate;
+    public void setNeedParticipateTime(boolean needParticipateTime) {
+        this.needParticipateTime = needParticipateTime;
     }
 
     public boolean isNeedGender() {
