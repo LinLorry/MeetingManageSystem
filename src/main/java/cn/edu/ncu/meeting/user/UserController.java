@@ -9,6 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User Controller
  * @author lorry
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
     private final Log logger = LogFactory.getLog(this.getClass());
+
     private final TokenUntil tokenUntil;
 
     private final UserService userService;
@@ -209,6 +213,41 @@ public class UserController {
             response.put("status", 0);
             response.put("message", "Edit Password Failed");
         }
+
+        return response;
+    }
+
+    /**
+     * Get Menus Api.
+     * @return {
+     *     "status": 1,
+     *     "message": "Get Menus Success!",
+     *     "data": {
+     *         MenuName: String: MenuURL: String
+     *     }
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/menus")
+    public JSONObject getMenus() {
+        JSONObject response = new JSONObject();
+        Map<String, String> map =new HashMap<>();
+
+        map.put("首页", "/index");
+        map.put("查询会议", "/query");
+        map.put("个人信息", "/profile");
+        map.put("登出", "/logout");
+
+        if (!(
+            (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getAuthorities().isEmpty()
+        ) {
+            map.put("系统管理", "/admin");
+        }
+
+        response.put("status", 0);
+        response.put("message", "Get Menus Success!");
+        response.put("data", map);
 
         return response;
     }
