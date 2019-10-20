@@ -38,18 +38,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(new AuthenticationProvider(userService));
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf()
+                .disable()
             .authorizeRequests()
-            .antMatchers("/api/user/token", "/api/user/registry").permitAll()
-            .anyRequest().authenticated().and()
-            .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers("/api/user/token", "/api/user/registry").permitAll()
+                .antMatchers("/api/**").authenticated()
+                .and()
+            .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
