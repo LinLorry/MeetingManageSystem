@@ -1,3 +1,20 @@
+var token = window.localStorage.token;
+var userProfileURL = "/api/user/profile";
+
+if (token != ""  && token != null) {
+    fetch(userProfileURL, {
+        headers: {
+            "Authorization": "Meeting " + token
+        },
+        method: "GET"
+    })
+    .then(function(response) {
+        if(response.ok) {
+            window.location.href = "/index.html";
+        }
+    })
+}
+
 function login() {
     var username = loginBox.username.value;
     var password = loginBox.password.value;
