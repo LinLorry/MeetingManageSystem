@@ -9,7 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -222,32 +224,54 @@ public class UserController {
      * @return {
      *     "status": 1,
      *     "message": "Get Menus Success!",
-     *     "data": {
-     *         MenuName: String: MenuURL: String
-     *     }
+     *     "data": [
+     *          {
+     *              "name": name: String,
+     *              "url": url: String
+     *          },
+     *          ...
+     *     ]
      * }
      */
     @ResponseBody
     @GetMapping("/menus")
     public JSONObject getMenus() {
         JSONObject response = new JSONObject();
+        List<Map<String, String>> list = new ArrayList<>();
         Map<String, String> map =new HashMap<>();
 
-        map.put("首页", "/index");
-        map.put("查询会议", "/query");
-        map.put("个人信息", "/profile");
-        map.put("登出", "/logout");
+        map.put("name", "首页");
+        map.put("url", "/index");
+        list.add(map);
+
+        map = new HashMap<>();
+        map.put("name", "查询会议");
+        map.put("url", "/query");
+        list.add(map);
+
+        map = new HashMap<>();
+        map.put("name", "个人信息");
+        map.put("url", "/profile");
+        list.add(map);
 
         if (!(
-            (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getAuthorities().isEmpty()
         ) {
-            map.put("系统管理", "/admin");
+            map = new HashMap<>();
+            map.put("name", "系统管理");
+            map.put("url", "/admin");
+            list.add(map);
         }
+
+        map = new HashMap<>();
+        map.put("name", "登出");
+        map.put("url", "/logout");
+        list.add(map);
 
         response.put("status", 1);
         response.put("message", "Get Menus Success!");
-        response.put("data", map);
+        response.put("data", list);
 
         return response;
     }
