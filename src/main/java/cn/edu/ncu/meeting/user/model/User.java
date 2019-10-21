@@ -31,6 +31,7 @@ public class User implements Serializable, UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<UserRole> userRoleSet = new HashSet<>();
 
     public long getId() {
