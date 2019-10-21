@@ -241,17 +241,17 @@ public class UserController {
         Map<String, String> map =new HashMap<>();
 
         map.put("name", "首页");
-        map.put("url", "/index");
+        map.put("url", "/index.html");
         list.add(map);
 
         map = new HashMap<>();
         map.put("name", "查询会议");
-        map.put("url", "/query");
+        map.put("url", "/query.html");
         list.add(map);
 
         map = new HashMap<>();
         map.put("name", "个人信息");
-        map.put("url", "/profile");
+        map.put("url", "/profile.html");
         list.add(map);
 
         if (!(
@@ -260,13 +260,13 @@ public class UserController {
         ) {
             map = new HashMap<>();
             map.put("name", "系统管理");
-            map.put("url", "/admin");
+            map.put("url", "/admin.html");
             list.add(map);
         }
 
         map = new HashMap<>();
         map.put("name", "登出");
-        map.put("url", "/logout");
+        map.put("url", "/logout.html");
         list.add(map);
 
         response.put("status", 1);
