@@ -245,7 +245,7 @@ public class UserController {
             map.put("系统管理", "/admin");
         }
 
-        response.put("status", 0);
+        response.put("status", 1);
         response.put("message", "Get Menus Success!");
         response.put("data", map);
 
