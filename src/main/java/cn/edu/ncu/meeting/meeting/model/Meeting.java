@@ -1,6 +1,7 @@
 package cn.edu.ncu.meeting.meeting.model;
 
 import cn.edu.ncu.meeting.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -55,6 +56,7 @@ public class Meeting implements Serializable {
     private User holdUser;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<MeetingJoinUser> joinUserSet = new HashSet<>();
 
     public long getId() {
