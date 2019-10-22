@@ -2,11 +2,11 @@ package cn.edu.ncu.meeting.meeting;
 
 import cn.edu.ncu.meeting.meeting.model.Meeting;
 import cn.edu.ncu.meeting.meeting.model.MeetingJoinUser;
+import cn.edu.ncu.meeting.until.SecurityUntil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -59,7 +59,7 @@ public class MeetingController {
     @PostMapping("/create")
     public JSONObject create(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUntil.getUser();
 
         try {
             response.put("data", meetingService.addMeeting(request, user));
@@ -112,7 +112,7 @@ public class MeetingController {
         JSONObject response = new JSONObject();
 
         Meeting meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUntil.getUser();
         boolean needHotel = request.getBooleanValue("needHotel");
         Timestamp participate = request.getTimestamp("participateTime");
 

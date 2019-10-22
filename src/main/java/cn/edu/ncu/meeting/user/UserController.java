@@ -1,11 +1,11 @@
 package cn.edu.ncu.meeting.user;
 
+import cn.edu.ncu.meeting.until.SecurityUntil;
 import cn.edu.ncu.meeting.until.TokenUntil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,9 +130,11 @@ public class UserController {
     @GetMapping("/profile")
     public JSONObject getProfile() {
         JSONObject response = new JSONObject();
+
         response.put("status", 1);
         response.put("message", "Get profile success.");
-        response.put("data", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        response.put("data", SecurityUntil.getUser());
+
         return response;
     }
 
@@ -157,7 +159,7 @@ public class UserController {
     @PostMapping("/profile")
     public JSONObject editProfile(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUntil.getUser();
 
         try {
             userService.updateUser(
@@ -199,7 +201,7 @@ public class UserController {
         String oldPassword = request.getString("oldPassword");
         String newPassword = request.getString("newPassword");
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUntil.getUser();
 
         try {
             if (userService.checkPassword(user, oldPassword)) {
@@ -255,9 +257,8 @@ public class UserController {
         list.add(map);
 
         if (!(
-                (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getAuthorities().isEmpty()
-        ) {
+                SecurityUntil.getAuthorities().isEmpty()
+        )) {
             map = new HashMap<>();
             map.put("name", "系统管理");
             map.put("url", "/admin.html");
