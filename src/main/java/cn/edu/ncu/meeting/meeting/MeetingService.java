@@ -150,4 +150,14 @@ public class MeetingService {
         return meetingRepository.findAll(s, PageRequest.of(page, 20)).getContent();
     }
 
+    /**
+     * Remove meeting by id
+     * @param id the meeting which will be delete id.
+     * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
+     */
+    void removeMeetingById(long id) throws NoSuchElementException {
+        meetingRepository.delete(
+                meetingRepository.findById(id).orElseThrow(NoSuchElementException::new)
+        );
+    }
 }
