@@ -29,7 +29,7 @@ public class MeetingController {
     }
 
     /**
-     * Add Meeting Api.
+     * Create Meeting Api
      * @param request {
      *      "name": meeting's name: String, not null
      *      "time": meeting's hold time: Timestamp, not null
@@ -55,8 +55,8 @@ public class MeetingController {
      * }
      */
     @ResponseBody
-    @PostMapping("/addMeeting")
-    public JSONObject createMeeting(@RequestBody JSONObject request) {
+    @PostMapping("/create")
+    public JSONObject create(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -82,7 +82,7 @@ public class MeetingController {
     }
 
     /**
-     * User Join Meeting Api.
+     * User Join Meeting Api
      * @param request {
      *      "meetingId": meetingId: String,
      *      "needHotel": It is join user need hotel?: Boolean, default false,
@@ -106,8 +106,8 @@ public class MeetingController {
      * }
      */
     @ResponseBody
-    @PostMapping("/joinMeeting")
-    public JSONObject joinMeeting(@RequestBody JSONObject request) {
+    @PostMapping("/join")
+    public JSONObject join(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
 
         Meeting meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
