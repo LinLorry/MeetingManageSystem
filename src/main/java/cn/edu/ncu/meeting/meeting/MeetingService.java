@@ -102,11 +102,7 @@ public class MeetingService {
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
      */
     Meeting loadMeetingById(long id) throws NoSuchElementException {
-        Optional<Meeting> optionalMeeting = meetingRepository.findById(id);
-        if (optionalMeeting.isPresent()) {
-            return optionalMeeting.get();
-        }
-        throw new NoSuchElementException("This Meeting isn't exist");
+        return meetingRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     /**
