@@ -8,11 +8,13 @@ import com.alibaba.fastjson.JSONObject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Meeting Service
@@ -24,6 +26,22 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
 
     private final SessionFactory sessionFactory;
+
+    private static Specification<Meeting> containsName(String name) {
+        return (meeting, cq, cb) -> cb.like(meeting.get("name"), "%" + name + "%");
+    }
+
+    private static Specification<Meeting> containsLocation(String location) {
+        return (meeting, cq, cb) -> cb.like(meeting.get("location"), "%" + location + "%");
+    }
+
+    private static Specification<Meeting> beforeTime(Timestamp time) {
+        return (meeting, cq, cb) -> cb.lessThan(meeting.get("time"), time);
+    }
+
+    private static Specification<Meeting> afterTime(Timestamp time) {
+        return (meeting, cq, cb) -> cb.greaterThan(meeting.get("time"), time);
+    }
 
     public MeetingService(MeetingRepository meetingRepository, EntityManagerFactory factory) {
         this.meetingRepository = meetingRepository;
@@ -60,7 +78,7 @@ public class MeetingService {
     }
 
     /**
-     * Add Meeting Join User.
+     * Add Meeting Join User
      * @param meetingJoinUser the Meeting Join User will be save.
      */
     void addJoinUserIntoMeeting(MeetingJoinUser meetingJoinUser) {
@@ -85,6 +103,42 @@ public class MeetingService {
             return optionalMeeting.get();
         }
         throw new NoSuchElementException("This Meeting isn't exist");
+    }
+
+    /**
+     * Load Meetings by name, time, location
+     * @param name meeting name contains this.
+     * @param before meeting time before this.
+     * @param after meeting time after this.
+     * @param location meeting location contains this.
+     * @param page the page number.
+     * @return the list of results.
+     */
+    List<Meeting> loadMeetings(String name, Timestamp before,
+                               Timestamp after, String location, int page) {
+        Specification<Meeting> s = null;
+
+        if (name != null && name.length() != 0) {
+            s = containsName(name);
+        }
+
+        if (before != null) {
+            s = s == null ? beforeTime(before) : s.and(beforeTime(before));
+        }
+
+        if (after != null) {
+            s = s == null ? afterTime(after) : s.and(afterTime(after));
+        }
+
+        if (location != null && location.length() != 0) {
+            s = s == null ? containsLocation(location) : s.and(containsLocation(location));
+        }
+
+        if (s == null) {
+            return new ArrayList<>();
+        }
+
+        return meetingRepository.findAll(s, PageRequest.of(page, 20)).getContent();
     }
 
 }
