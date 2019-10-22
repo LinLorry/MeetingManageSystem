@@ -27,6 +27,10 @@ public class MeetingService {
 
     private final SessionFactory sessionFactory;
 
+    private static Specification<Meeting> equalId(long id) {
+        return (meeting, cq, cb) -> cb.equal(meeting.get("id"), id);
+    }
+
     private static Specification<Meeting> containsName(String name) {
         return (meeting, cq, cb) -> cb.like(meeting.get("name"), "%" + name + "%");
     }
@@ -107,6 +111,7 @@ public class MeetingService {
 
     /**
      * Load Meetings by name, time, location
+     * @param id meeting id == this.
      * @param name meeting name contains this.
      * @param before meeting time before this.
      * @param after meeting time after this.
@@ -114,12 +119,16 @@ public class MeetingService {
      * @param page the page number.
      * @return the list of results.
      */
-    List<Meeting> loadMeetings(String name, Timestamp before,
+    List<Meeting> loadMeetings(Long id, String name, Timestamp before,
                                Timestamp after, String location, int page) {
         Specification<Meeting> s = null;
 
+        if (id != null) {
+            s = equalId(id);
+        }
+
         if (name != null && name.length() != 0) {
-            s = containsName(name);
+            s = s == null ? containsName(name) : s.and(containsName(name));
         }
 
         if (before != null) {
