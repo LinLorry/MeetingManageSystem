@@ -117,7 +117,7 @@ public class MeetingController {
         Timestamp participate = request.getTimestamp("participateTime");
 
         try {
-            if (meeting.getHoldUser().getId().equals(user.getId())) {
+            if (meeting.getHoldUser().getId() == user.getId()) {
                 response.put("status", 0);
                 response.put("message", "Hold User can't join meeting.");
             } else if (participate == null && meeting.isNeedParticipateTime()) {
