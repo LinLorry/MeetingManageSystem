@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -142,4 +143,61 @@ public class MeetingController {
 
         return response;
     }
+
+    /**
+     * Get Meeting Api
+     * @param id meeting id == this.
+     * @param name meeting name contains this.
+     * @param before meeting time before this.
+     * @param after meeting time after this.
+     * @param location meeting location contains this.
+     * @param page the page number.
+     * @return if have results return {
+     *     "status": 1,
+     *     "message": "Get Meetings Success.",
+     *     "data": [
+     *          {
+     *              meeting data
+     *          },
+     *          ...
+     *     ]
+     * } else if don't have result return {
+     *     "status": 0,
+     *     "message": "This Meeting isn't exist.",
+     * } else return {
+     *     "status": 0,
+     *     "message": "Get Meeting Failed.",
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/get")
+    public JSONObject get(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Timestamp before,
+            @RequestParam(required = false) Timestamp after,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false, defaultValue = "0") int page
+    ) {
+        JSONObject response = new JSONObject();
+        try {
+            List<Meeting> list = meetingService.loadMeetings(id, name,
+                    before, after, location, page);
+            if (list.size() != 0) {
+                response.put("status", 1);
+                response.put("message", "Get Meetings Success.");
+                response.put("data", list);
+            } else {
+                response.put("status", 0);
+                response.put("message", "This Meeting isn't exist.");
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            response.put("status", 0);
+            response.put("message", "Get Meeting Failed.");
+        }
+
+        return response;
+    }
+
 }
