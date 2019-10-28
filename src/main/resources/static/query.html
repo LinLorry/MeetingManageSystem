@@ -5,6 +5,7 @@
         <link rel="stylesheet" type="text/css" href="css/global.css"/>
         <link rel="stylesheet" type="text/css" href="css/query.css"/>
         <script src="js/loadMenus.js"></script>
+        <script src="js/query.js"></script>
 
         <meta charset="utf8"/>
     </head>
@@ -26,14 +27,17 @@
                     <h2><strong>会议查询</strong></h2>
                 </div>
                 <div id="query-input">
-                    <div class="query-div"><label>会议ID：</label><input type="number" /></div>
-                    <div class="query-div"><label>会议名称：</label><input type="text"/></div>
-                    <div class="query-div"><label>会议时间：</label><input type="datetime-local"/></div>
-                    <div class="query-div"><label>会议地点：</label><input type="text"/></div>
-                    <div class="query-div"><input type="button" value="查询"/></div>
+                    <div class="query-div"><label>会议ID：</label><input id="id" type="number" /></div>
+                    <div class="query-div"><label>会议名称：</label><input id="name" type="text"/></div>
+                    <div class="query-div">
+                        <label>会议时间：</label>
+                        <input id="after" type="datetime-local"/> - <input id="before" type="datetime-local"/> 
+                    </div>
+                    <div class="query-dDiv"><label>会议地点：</label><input id="location" type="text"/></div>
+                    <div class="query-div"><input type="button" value="查询" onclick="query()"/></div>
                     <div class="clear"></div>
                 </div>
-                <div id="query-result">
+                <div id="query-result-box">
                     <table class="meeting-table">
                         <thead>
                             <tr>
@@ -45,15 +49,8 @@
                                 <th>会议简介</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Test</td>
-                                <td>Test time</td>
-                                <td>Test location</td>
-                                <td>Test people</td>
-                                <td>Test room</td>
-                                <td>Test comment</td>
-                            </tr>
+                        <tbody id="query-result">
+                            
                         </tbody>
                     </table>
                 </div>
