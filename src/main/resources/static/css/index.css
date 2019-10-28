@@ -1,5 +1,5 @@
 #wrap {
-    width: 100%;
+    width: 80%;
     text-align: center;
     margin: 0;
     padding-left: 10%;
@@ -7,7 +7,7 @@
 }
 
 #title-box {
-    width: 80%;
+    width: 100%;
     box-sizing: border-box;
 
     border-bottom-color: rgb(119, 136, 153);
@@ -26,7 +26,7 @@
 
 #select-box {
     float: left;
-    width: 15%;
+    width: 20%;
     box-sizing: border-box;
     text-align: left;
 }
@@ -36,12 +36,13 @@
 }
 
 #comment-box {
-    width: 65%;
+    width: 80%;
     float: left;
     box-sizing: border-box;
 }
 
 #footer-box {
+    position: fixed;
     display: flex;
     width: 80%;
     bottom: 0;
