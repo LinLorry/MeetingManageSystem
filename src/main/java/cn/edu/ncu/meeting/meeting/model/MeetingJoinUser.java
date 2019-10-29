@@ -25,12 +25,14 @@ public class MeetingJoinUser implements Serializable {
     private User user;
 
     @Column(columnDefinition = "Boolean default false")
-    private boolean needHotel;
+    private boolean needHotel = false;
 
     private Timestamp participateTime;
 
     @Column(columnDefinition = "Boolean default false")
-    private boolean checkIn;
+    private boolean checkIn = false;
+
+    public MeetingJoinUser() { }
 
     public MeetingJoinUser(Meeting meeting, User user, boolean needHotel,
                            Timestamp participateTime, boolean checkIn) {
