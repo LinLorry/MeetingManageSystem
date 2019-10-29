@@ -200,4 +200,52 @@ public class MeetingController {
         return response;
     }
 
+    /**
+     * Delete Meeting Api
+     * @param request {
+     *      "id": id: Integer not null
+     * }
+     * @return if delete success return {
+     *     "status": 1,
+     *     "message": "Delete meeting success."
+     * } else if don't have authority to delete meeting return {
+     *     "status": 0,
+     *     "message": "You can't delete this meeting."
+     * } else if meeting isn't exist return {
+     *     "status": 0,
+     *     "message": "This Meeting isn't exist."
+     * } else return {
+     *     "status": 0,
+     *     "message": "Delete Meeting Failed."
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/delete")
+    public JSONObject delete(@RequestBody JSONObject request) {
+        JSONObject response = new JSONObject();
+
+        User user = SecurityUntil.getUser();
+
+        try {
+            Meeting meeting = meetingService.loadMeetingById(request.getLongValue("id"));
+
+            if (meeting.getHoldUser().getId() != user.getId() && user.getAuthorities().isEmpty()) {
+                response.put("status", 0);
+                response.put("message", "You can't delete this meeting.");
+            } else {
+                meetingService.removeMeetingById(meeting.getId());
+                response.put("status", 1);
+                response.put("message", "Delete meeting success.");
+            }
+        } catch (NoSuchElementException e) {
+            response.put("status", 0);
+            response.put("message", "This Meeting isn't exist.");
+        } catch (Exception e) {
+            logger.error(e);
+            response.put("status", 0);
+            response.put("message", "Delete Meeting Failed.");
+        }
+
+        return response;
+    }
 }
