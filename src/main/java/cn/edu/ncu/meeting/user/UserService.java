@@ -2,11 +2,16 @@ package cn.edu.ncu.meeting.user;
 
 import cn.edu.ncu.meeting.user.model.User;
 import cn.edu.ncu.meeting.user.repo.UserRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManagerFactory;
 
 /**
  * User Service
@@ -18,13 +23,19 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
+    private final SessionFactory sessionFactory;
+
     @Value("${Manage.salt}")
     private String salt;
 
     private static BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EntityManagerFactory factory) {
         this.userRepository = userRepository;
+        if(factory.unwrap(SessionFactory.class) == null){
+            throw new NullPointerException("factory is not a hibernate factory");
+        }
+        this.sessionFactory = factory.unwrap(SessionFactory.class);
     }
 
     /**
@@ -62,11 +73,17 @@ public class UserService implements UserDetailsService {
      * @param name the user name.
      */
     void updateUser(User user, String name) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
         if (name != null) {
             user.setName(name);
         }
 
-        userRepository.save(user);
+        session.update(user);
+
+        tx.commit();
+        session.close();
     }
 
     /**
