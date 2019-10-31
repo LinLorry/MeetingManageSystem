@@ -37,8 +37,7 @@ function query() {
     .then(function(json) {
         if (json.status == 1) {
             queryResult.innerHTML = "";
-            for (let index = 0; index < json.data.length; index++) {
-                const element = json.data[index];
+            json.data.forEach(element => {
                 let tr = document.createElement("tr");
                 let name = document.createElement("td");
                 let time = document.createElement("time");
@@ -63,7 +62,7 @@ function query() {
                 tr.appendChild(comment);
 
                 queryResult.appendChild(tr);
-            }
+            })
         }
     })
 }
