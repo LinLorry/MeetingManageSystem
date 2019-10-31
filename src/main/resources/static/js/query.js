@@ -1,3 +1,7 @@
+getMenus();
+
+window.onload = loadMenus;
+
 function query() {
     let regex = /^\d{4}-\d{2}-\d{2}$/
     let url = new URL("/api/meeting/get", "http://" + document.domain);

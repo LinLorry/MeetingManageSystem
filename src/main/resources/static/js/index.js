@@ -1,0 +1,3 @@
+getMenus();
+
+window.onload = loadMenus;
