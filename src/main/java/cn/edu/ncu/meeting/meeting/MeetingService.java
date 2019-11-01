@@ -147,6 +147,15 @@ public class MeetingService {
     }
 
     /**
+     * Load Hot Meetings by page number
+     * @param page the page number
+     * @return the list of meetings.
+     */
+    List<Meeting> loadHotMeeting(int page) {
+        return meetingRepository.findAllHot(PageRequest.of(page, 5)).getContent();
+    }
+
+    /**
      * Remove meeting by id
      * @param id the meeting which will be delete id.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
