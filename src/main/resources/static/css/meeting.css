@@ -1,0 +1,25 @@
+#meeting-detail-box {
+    text-align: left;
+}
+
+#meeting-detail {
+    list-style: none;
+    margin-left: 0;
+}
+
+#meeting-detail li {
+    font-size: 1.4em;
+}
+
+#need-list{
+    font-size: 0.7em;
+}
+
+#needHotel-label {
+    display: block;
+}
+
+#ParticipateTime-label {
+    display: none;
+}
+
