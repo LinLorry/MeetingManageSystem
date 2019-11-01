@@ -165,6 +165,15 @@ public class MeetingService {
     }
 
     /**
+     * Load Immediately begin Meetings by page number
+     * @param page the page number
+     * @return the list of meetings.
+     */
+    List<Meeting> loadImmediatelyBeginMeeting(int page) {
+        return meetingRepository.findAllImmediatelyBegin(PageRequest.of(page, 5)).getContent();
+    }
+
+    /**
      * Remove meeting by id
      * @param id the meeting which will be delete id.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
