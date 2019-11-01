@@ -1,7 +1,7 @@
 package cn.edu.ncu.meeting.user;
 
-import cn.edu.ncu.meeting.until.SecurityUntil;
-import cn.edu.ncu.meeting.until.TokenUntil;
+import cn.edu.ncu.meeting.util.SecurityUtil;
+import cn.edu.ncu.meeting.util.TokenUtil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.logging.Log;
@@ -24,12 +24,12 @@ import java.util.Map;
 public class UserController {
     private final Log logger = LogFactory.getLog(this.getClass());
 
-    private final TokenUntil tokenUntil;
+    private final TokenUtil tokenUtil;
 
     private final UserService userService;
 
-    public UserController(TokenUntil tokenUntil, UserService userService) {
-        this.tokenUntil = tokenUntil;
+    public UserController(TokenUtil tokenUtil, UserService userService) {
+        this.tokenUtil = tokenUtil;
         this.userService = userService;
     }
 
@@ -102,7 +102,7 @@ public class UserController {
             if (userService.checkPassword(user, password)) {
                 response.put("status", 1);
                 response.put("message", "Login success");
-                response.put("token", tokenUntil.generateToken(user));
+                response.put("token", tokenUtil.generateToken(user));
             } else {
                 response.put("status", 0);
                 response.put("message", "Wrong password.");
@@ -133,7 +133,7 @@ public class UserController {
 
         response.put("status", 1);
         response.put("message", "Get profile success.");
-        response.put("data", SecurityUntil.getUser());
+        response.put("data", SecurityUtil.getUser());
 
         return response;
     }
@@ -159,7 +159,7 @@ public class UserController {
     @PostMapping("/profile")
     public JSONObject editProfile(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-        User user = SecurityUntil.getUser();
+        User user = SecurityUtil.getUser();
 
         try {
             userService.updateUser(
@@ -201,7 +201,7 @@ public class UserController {
         String oldPassword = request.getString("oldPassword");
         String newPassword = request.getString("newPassword");
 
-        User user = SecurityUntil.getUser();
+        User user = SecurityUtil.getUser();
 
         try {
             if (userService.checkPassword(user, oldPassword)) {
@@ -257,7 +257,7 @@ public class UserController {
         list.add(map);
 
         if (!(
-                SecurityUntil.getAuthorities().isEmpty()
+                SecurityUtil.getAuthorities().isEmpty()
         )) {
             map = new HashMap<>();
             map.put("name", "系统管理");

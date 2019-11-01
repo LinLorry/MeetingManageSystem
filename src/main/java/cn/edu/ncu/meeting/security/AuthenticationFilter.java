@@ -1,6 +1,6 @@
 package cn.edu.ncu.meeting.security;
 
-import cn.edu.ncu.meeting.until.TokenUntil;
+import cn.edu.ncu.meeting.util.TokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,10 +25,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Value("${Manage.AuthenticationName}")
     private String AuthenticationName;
 
-    private final TokenUntil tokenUntil;
+    private final TokenUtil tokenUtil;
 
-    public AuthenticationFilter(TokenUntil tokenUntil) {
-        this.tokenUntil = tokenUntil;
+    public AuthenticationFilter(TokenUtil tokenUtil) {
+        this.tokenUtil = tokenUtil;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
                     SecurityContextHolder.getContext().setAuthentication(
-                            tokenUntil.getAuthenticationFromToken(token)
+                            tokenUtil.getAuthenticationFromToken(token)
                     );
                 } catch (ExpiredJwtException e) {
                     logger.warn("JWT Token has expired");

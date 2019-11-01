@@ -1,4 +1,4 @@
-package cn.edu.ncu.meeting.until;
+package cn.edu.ncu.meeting.util;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Token Until
@@ -18,7 +17,7 @@ import java.util.function.Function;
  * @author lin864464995@163.com
  */
 @Component
-public class TokenUntil {
+public class TokenUtil {
     private static final long TOKEN_VALIDITY = 5 * 60 * 60;
 
     @Value("${Manage.secret}")
