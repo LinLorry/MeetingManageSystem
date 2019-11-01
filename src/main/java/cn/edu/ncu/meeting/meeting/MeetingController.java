@@ -293,7 +293,7 @@ public class MeetingController {
     public JSONObject delete(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
 
-        User user = SecurityUntil.getUser();
+        User user = SecurityUtil.getUser();
 
         try {
             Meeting meeting = meetingService.loadMeetingById(request.getLongValue("id"));
