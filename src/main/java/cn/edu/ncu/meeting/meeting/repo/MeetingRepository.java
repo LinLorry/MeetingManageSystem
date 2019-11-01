@@ -27,4 +27,6 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long>, JpaSpe
             "group by m.id " +
             "order by count(mju) desc")
     Page<Meeting> findAllHot(Pageable pageable);
+
+    Page<Meeting> findAllByOrderByIdDesc(Pageable pageable);
 }
