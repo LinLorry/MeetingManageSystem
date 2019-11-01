@@ -217,7 +217,7 @@ public class MeetingController {
         JSONObject response = new JSONObject();
 
         response.put("status", 1);
-        response.put("message", "Get hot meeting success");
+        response.put("message", "Get hot meeting success.");
         response.put("data", meetingService.loadHotMeeting(page));
 
         return response;
@@ -228,7 +228,7 @@ public class MeetingController {
      * @param page the page number.
      * @return if get success return {
      *     "status": 1,
-     *     "message": "Get newest meeting success",
+     *     "message": "Get newest meeting success.",
      *     "data": [
      *          meeting data...
      *     ]
@@ -240,8 +240,31 @@ public class MeetingController {
         JSONObject response = new JSONObject();
 
         response.put("status", 1);
-        response.put("message", "Get newest meeting success");
+        response.put("message", "Get newest meeting success.");
         response.put("data", meetingService.loadNewestMeeting(page));
+
+        return response;
+    }
+
+    /**
+     * Get Start Soon Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get start soon meeting success.",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getStartSoon")
+    public JSONObject getStartSoon(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get start soon meeting success.");
+        response.put("data", meetingService.loadImmediatelyBeginMeeting(page));
 
         return response;
     }
