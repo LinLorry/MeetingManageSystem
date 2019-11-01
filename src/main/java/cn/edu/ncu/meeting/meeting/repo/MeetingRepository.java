@@ -29,4 +29,12 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long>, JpaSpe
     Page<Meeting> findAllHot(Pageable pageable);
 
     Page<Meeting> findAllByOrderByIdDesc(Pageable pageable);
+
+    /**
+     * Get not only Immediate Begin but also not over time Meetings
+     * @param pageable the page number
+     * @return Meeting Page.
+     */
+    @Query(value = "FROM Meeting m WHERE m.time > current_time ORDER BY m.time asc")
+    Page<Meeting> findAllImmediatelyBegin(Pageable pageable);
 }
