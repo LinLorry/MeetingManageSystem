@@ -200,4 +200,121 @@ public class MeetingController {
         return response;
     }
 
+    /**
+     * Get Hot Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get hot meeting success",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getHot")
+    public JSONObject getHot(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get hot meeting success.");
+        response.put("data", meetingService.loadHotMeeting(page));
+
+        return response;
+    }
+
+    /**
+     * Get Newest Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get newest meeting success.",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getNewest")
+    public JSONObject getNewest(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get newest meeting success.");
+        response.put("data", meetingService.loadNewestMeeting(page));
+
+        return response;
+    }
+
+    /**
+     * Get Start Soon Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get start soon meeting success.",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getStartSoon")
+    public JSONObject getStartSoon(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get start soon meeting success.");
+        response.put("data", meetingService.loadImmediatelyBeginMeeting(page));
+
+        return response;
+    }
+
+    /**
+     * Delete Meeting Api
+     * @param request {
+     *      "id": id: Integer not null
+     * }
+     * @return if delete success return {
+     *     "status": 1,
+     *     "message": "Delete meeting success."
+     * } else if don't have authority to delete meeting return {
+     *     "status": 0,
+     *     "message": "You can't delete this meeting."
+     * } else if meeting isn't exist return {
+     *     "status": 0,
+     *     "message": "This Meeting isn't exist."
+     * } else return {
+     *     "status": 0,
+     *     "message": "Delete Meeting Failed."
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/delete")
+    public JSONObject delete(@RequestBody JSONObject request) {
+        JSONObject response = new JSONObject();
+
+        User user = SecurityUntil.getUser();
+
+        try {
+            Meeting meeting = meetingService.loadMeetingById(request.getLongValue("id"));
+
+            if (meeting.getHoldUser().getId() != user.getId() && user.getAuthorities().isEmpty()) {
+                response.put("status", 0);
+                response.put("message", "You can't delete this meeting.");
+            } else {
+                meetingService.removeMeetingById(meeting.getId());
+                response.put("status", 1);
+                response.put("message", "Delete meeting success.");
+            }
+        } catch (NoSuchElementException e) {
+            response.put("status", 0);
+            response.put("message", "This Meeting isn't exist.");
+        } catch (Exception e) {
+            logger.error(e);
+            response.put("status", 0);
+            response.put("message", "Delete Meeting Failed.");
+        }
+
+        return response;
+    }
 }
