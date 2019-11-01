@@ -205,7 +205,7 @@ public class MeetingController {
      * @param page the page number.
      * @return if get success return {
      *     "status": 1,
-     *     "message": "Get Hot meeting success",
+     *     "message": "Get hot meeting success",
      *     "data": [
      *          meeting data...
      *     ]
@@ -217,8 +217,31 @@ public class MeetingController {
         JSONObject response = new JSONObject();
 
         response.put("status", 1);
-        response.put("message", "Get Hot meeting success");
+        response.put("message", "Get hot meeting success");
         response.put("data", meetingService.loadHotMeeting(page));
+
+        return response;
+    }
+
+    /**
+     * Get Newest Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get newest meeting success",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getNewest")
+    public JSONObject getNewest(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get newest meeting success");
+        response.put("data", meetingService.loadNewestMeeting(page));
 
         return response;
     }
