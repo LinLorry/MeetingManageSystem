@@ -2,13 +2,19 @@ package cn.edu.ncu.meeting.meeting;
 
 import cn.edu.ncu.meeting.meeting.model.Meeting;
 import cn.edu.ncu.meeting.meeting.model.MeetingJoinUser;
+import cn.edu.ncu.meeting.util.QRCodeUtil;
 import cn.edu.ncu.meeting.util.SecurityUtil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,6 +30,10 @@ public class MeetingController {
     private final Log logger = LogFactory.getLog(this.getClass());
 
     private final MeetingService meetingService;
+
+    @Value("${Manage.Domain}")
+    private String domain;
+
 
     public MeetingController(MeetingService meetingService) {
         this.meetingService = meetingService;
@@ -316,5 +326,28 @@ public class MeetingController {
         }
 
         return response;
+    }
+
+    /**
+     * Get Meeting QR Code Api.
+     * @param id the meeting id.
+     * @param response the response.
+     */
+    @GetMapping("/QRCode")
+    @ResponseBody
+    public void getQRCode(@RequestParam long id, HttpServletResponse response) {
+        String url = "http://" + domain + "/meeting.html?id=" + id;
+
+        response.setHeader("Cache-Control", "no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/png");
+
+        try {
+            BitMatrix QRCodeImg = QRCodeUtil.generateQRCodeStream(url);
+            MatrixToImageWriter.writeToStream(QRCodeImg, "png", response.getOutputStream());
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 }
