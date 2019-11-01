@@ -201,6 +201,29 @@ public class MeetingController {
     }
 
     /**
+     * Get Hot Meeting Api.
+     * @param page the page number.
+     * @return if get success return {
+     *     "status": 1,
+     *     "message": "Get Hot meeting success",
+     *     "data": [
+     *          meeting data...
+     *     ]
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/getHot")
+    public JSONObject getHot(@RequestParam(required = false, defaultValue = "0") int page) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Get Hot meeting success");
+        response.put("data", meetingService.loadHotMeeting(page));
+
+        return response;
+    }
+
+    /**
      * Delete Meeting Api
      * @param request {
      *      "id": id: Integer not null
