@@ -3,6 +3,8 @@ package cn.edu.ncu.meeting.user.repo;
 import cn.edu.ncu.meeting.user.model.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 /**
  * User Repository
  * @author lorry
@@ -10,7 +12,7 @@ import org.springframework.data.repository.CrudRepository;
  * @see org.springframework.data.repository.CrudRepository
  */
 public interface UserRepository extends CrudRepository<User, Long> {
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);
 }
