@@ -99,6 +99,16 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * Load a User By id.
+     * @param id the user id.
+     * @return the user.
+     * @throws NoSuchElementException if the user is not exits throw this exception.
+     */
+    User loadUserById(long id) throws NoSuchElementException {
+        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    }
+
+    /**
      * Load a user by username.
      * @param username the username.
      * @return the user.

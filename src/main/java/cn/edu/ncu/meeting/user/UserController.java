@@ -9,10 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User Controller
@@ -284,4 +281,32 @@ public class UserController {
 
         return response;
     }
+
+    /**
+     * Get Join Meeting Api.
+     * @return {
+     *     "status": 1,
+     *     "message": "Get join meetings success.",
+     *     "data": [
+     *          {
+     *              meeting data
+     *          },
+     *          ...
+     *     ]
+     * }
+     */
+    @GetMapping("/join")
+    @ResponseBody
+    public JSONObject getJoinMeeting() {
+        JSONObject response = new JSONObject();
+        User user = userService.loadUserById(SecurityUtil.getUserId());
+
+        response.put("status", 1);
+        response.put("message", "Get join meetings success.");
+        response.put("data", user.getJoinMeeting());
+
+        return response;
+    }
+
+
 }
