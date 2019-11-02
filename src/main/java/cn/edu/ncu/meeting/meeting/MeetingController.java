@@ -6,7 +6,6 @@ import cn.edu.ncu.meeting.util.QRCodeUtil;
 import cn.edu.ncu.meeting.util.SecurityUtil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.apache.commons.logging.Log;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -88,6 +88,81 @@ public class MeetingController {
                 response.put("message", "Create Meeting Failed.");
             }
         }
+
+        return response;
+    }
+
+    /**
+     * Get Join Meeting User Api.
+     * @param id the meeting id.
+     * @return if get join user success return {
+     *     "status": 1,
+     *     "message": "Get meeting join users success.",
+     *     "data": [
+     *          {
+     *              user data
+     *          },
+     *          ...
+     *     ]
+     * } else if return {
+     *     "status": 0,
+     *     "message": message: String
+     * }
+     */
+    @GetMapping("/join")
+    @ResponseBody
+    public JSONObject getJoinUsers(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        Meeting meeting = meetingService.loadMeetingById(id);
+
+        if (meeting.getHoldUser().getId() != SecurityUtil.getUserId() &&
+                SecurityUtil.getAuthorities().isEmpty()) {
+            response.put("status", 0);
+            response.put("message", "You can't get join this meeting user info.");
+            return response;
+        }
+        List<JSONObject> data = new ArrayList<>();
+
+        boolean needName = meeting.isNeedName(),
+                needGender = meeting.isNeedGender(),
+                needParticipateTime = meeting.isNeedParticipateTime(),
+                needIdCard = meeting.isNeedIdCard(),
+                needOrganization = meeting.isNeedOrganization();
+
+        for (MeetingJoinUser meetingJoinUser : meeting.getJoinUserSet()) {
+            User user = meetingJoinUser.getUser();
+            JSONObject one = new JSONObject();
+
+            one.put("needHotel", meetingJoinUser.isNeedHotel());
+            one.put("checkIn", meetingJoinUser.isCheckIn());
+
+            if (needName) {
+                one.put("name", user.getName());
+            }
+
+            if (needGender) {
+                one.put("gender", user.isGender());
+            }
+
+            if (needParticipateTime) {
+                one.put("participateTime", meetingJoinUser.getParticipateTime());
+            }
+
+            if (needIdCard) {
+                one.put("idCard", user.getIdCard());
+            }
+
+            if (needOrganization) {
+                one.put("organization", user.getOrganization());
+            }
+
+            data.add(one);
+        }
+
+        response.put("status", 1);
+        response.put("message", "Get meeting join users success.");
+        response.put("data", data);
 
         return response;
     }
