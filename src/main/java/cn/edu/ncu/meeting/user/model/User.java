@@ -1,5 +1,7 @@
 package cn.edu.ncu.meeting.user.model;
 
+import cn.edu.ncu.meeting.meeting.model.Meeting;
+import cn.edu.ncu.meeting.meeting.model.MeetingJoinUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,20 +46,16 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     private Set<UserRole> userRoleSet = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<MeetingJoinUser> meetingJoinUserSet = new HashSet<>();
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Set<UserRole> getUserRoleSet() {
-        return userRoleSet;
-    }
-
-    public void setUserRoleSet(Set<UserRole> userRoleSet) {
-        this.userRoleSet = userRoleSet;
     }
 
     @Override
@@ -116,6 +114,30 @@ public class User implements Serializable, UserDetails {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<UserRole> getUserRoleSet() {
+        return userRoleSet;
+    }
+
+    public void setUserRoleSet(Set<UserRole> userRoleSet) {
+        this.userRoleSet = userRoleSet;
+    }
+
+    public Set<MeetingJoinUser> getMeetingJoinUserSet() {
+        return meetingJoinUserSet;
+    }
+
+    public void setMeetingJoinUserSet(Set<MeetingJoinUser> meetingJoinUserSet) {
+        this.meetingJoinUserSet = meetingJoinUserSet;
+    }
+
+    public Set<Meeting> getJoinMeeting() {
+        Set<Meeting> set = new HashSet<>();
+        for (MeetingJoinUser meetingJoinUser : meetingJoinUserSet) {
+            set.add(meetingJoinUser.getMeeting());
+        }
+        return set;
     }
 
     @Override
