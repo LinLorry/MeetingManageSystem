@@ -42,7 +42,16 @@ public class UserController {
      * }
      * @return if registry success return {
      *     "status": 1,
-     *     "message": "Create User Success"
+     *     "message": "Create User Success",
+     *     "data": {
+     *         "id": user id: long,
+     *         "username": username: String,
+     *         "name": name: String,
+     *         "gender": user gender: boolean (false: male, true: female)
+     *         "organization": user organization: String,
+     *         "phoneNumber": user phone number: String,
+     *         "idCard": user id card number: String
+     *     }
      * } else return {
      *     "status: 0,
      *     "message": message: String
@@ -117,8 +126,13 @@ public class UserController {
      *     "status": 1,
      *     "message": "Get profile success.",
      *     "data": {
+     *         "id": user id: long,
      *         "username": username: String,
-     *         "name": name: String
+     *         "name": name: String,
+     *         "gender": user gender: boolean (false: male, true: female)
+     *         "organization": user organization: String,
+     *         "phoneNumber": user phone number: String,
+     *         "idCard": user id card number: String
      *     }
      * }
      */
