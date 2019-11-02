@@ -177,6 +177,7 @@ public class UserController {
             response.put("message", "Update profile success.");
             response.put("data", user);
         } catch (Exception e) {
+            logger.error(e);
             response.put("status", 0);
             response.put("message", "Update profile failed.");
         }
