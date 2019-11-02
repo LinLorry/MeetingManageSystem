@@ -34,7 +34,7 @@ public class User implements Serializable, UserDetails {
     private String IdCard;
 
     @Column(columnDefinition = "Boolean default false")
-    private boolean sex = false;
+    private boolean gender = false;
 
     private String organization;
 
@@ -94,12 +94,12 @@ public class User implements Serializable, UserDetails {
         IdCard = idCard;
     }
 
-    public boolean isSex() {
-        return sex;
+    public boolean isGender() {
+        return gender;
     }
 
-    public void setSex(boolean sex) {
-        this.sex = sex;
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public String getOrganization() {

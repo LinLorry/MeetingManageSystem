@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
         user.setName(json.getString("name"));
         user.setPassword(hash);
         user.setIdCard(json.getString("idCard"));
-        user.setSex(json.getBooleanValue("sex"));
+        user.setGender(json.getBooleanValue("gender"));
         user.setOrganization(json.getString("organization"));
         user.setPhoneNumber(json.getString("phoneNumber"));
 
@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
     void updateUser(User user, JSONObject json) {
         user.setName(json.getString("name"));
         user.setIdCard(json.getString("idCard"));
-        user.setSex(json.getBooleanValue("sex"));
+        user.setGender(json.getBooleanValue("gender"));
         user.setOrganization(json.getString("organization"));
         user.setPhoneNumber(json.getString("phoneNumber"));
 
