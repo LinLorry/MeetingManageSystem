@@ -54,11 +54,7 @@ public class UserController {
         JSONObject response = new JSONObject();
 
         try {
-            response.put("data", userService.addUser(
-                    request.getString("username"),
-                    request.getString("name"),
-                    request.getString("password")
-            ));
+            response.put("data", userService.addUser(request));
             response.put("status", 1);
             response.put("message", "Registry Success");
         } catch (Exception e) {
@@ -162,10 +158,7 @@ public class UserController {
         User user = SecurityUtil.getUser();
 
         try {
-            userService.updateUser(
-                    user,
-                    request.getString("name")
-            );
+            userService.updateUser(user, request);
             response.put("status", 1);
             response.put("message", "Update profile success.");
             response.put("data", user);

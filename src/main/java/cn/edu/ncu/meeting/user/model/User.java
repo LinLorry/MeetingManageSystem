@@ -25,10 +25,20 @@ public class User implements Serializable, UserDetails {
     @Column(unique = true)
     private String username;
 
+    @Column(nullable = false)
     private String name;
 
     @JsonIgnore
     private String password;
+
+    private String IdCard;
+
+    @Column(columnDefinition = "Boolean default false")
+    private boolean sex = false;
+
+    private String organization;
+
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -74,6 +84,38 @@ public class User implements Serializable, UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getIdCard() {
+        return IdCard;
+    }
+
+    public void setIdCard(String idCard) {
+        IdCard = idCard;
+    }
+
+    public boolean isSex() {
+        return sex;
+    }
+
+    public void setSex(boolean sex) {
+        this.sex = sex;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
