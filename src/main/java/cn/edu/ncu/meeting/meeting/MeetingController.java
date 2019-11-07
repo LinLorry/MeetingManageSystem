@@ -10,14 +10,20 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * Meeting Controller
@@ -122,47 +128,10 @@ public class MeetingController {
             response.put("message", "You can't get join this meeting user info.");
             return response;
         }
-        List<JSONObject> data = new ArrayList<>();
-
-        boolean needName = meeting.isNeedName(),
-                needGender = meeting.isNeedGender(),
-                needParticipateTime = meeting.isNeedParticipateTime(),
-                needIdCard = meeting.isNeedIdCard(),
-                needOrganization = meeting.isNeedOrganization();
-
-        for (MeetingJoinUser meetingJoinUser : meeting.getJoinUserSet()) {
-            User user = meetingJoinUser.getUser();
-            JSONObject one = new JSONObject();
-
-            one.put("needHotel", meetingJoinUser.isNeedHotel());
-            one.put("checkIn", meetingJoinUser.isCheckIn());
-
-            if (needName) {
-                one.put("name", user.getName());
-            }
-
-            if (needGender) {
-                one.put("gender", user.isGender());
-            }
-
-            if (needParticipateTime) {
-                one.put("participateTime", meetingJoinUser.getParticipateTime());
-            }
-
-            if (needIdCard) {
-                one.put("idCard", user.getIdCard());
-            }
-
-            if (needOrganization) {
-                one.put("organization", user.getOrganization());
-            }
-
-            data.add(one);
-        }
 
         response.put("status", 1);
         response.put("message", "Get meeting join users success.");
-        response.put("data", data);
+        response.put("data", meeting.getJoinUserInfo());
 
         return response;
     }
@@ -227,6 +196,68 @@ public class MeetingController {
 
 
         return response;
+    }
+
+    /**
+     * Get Meeting Join User Info Excel File Api.
+     * @param id the meeting id.
+     * @param response the response.
+     */
+    @GetMapping("/getJoinExcel")
+    public void getJoinUsersExcel(@RequestParam long id, HttpServletResponse response) {
+        Meeting meeting = meetingService.loadMeetingById(id);
+        if (meeting.getHoldUser().getId() != SecurityUtil.getUserId() &&
+                SecurityUtil.getAuthorities().isEmpty()) {
+            JSONObject json = new JSONObject();
+            json.put("status", 0);
+            json.put("message", "You can't get join this meeting user info.");
+
+            response.setHeader("Content-Type", "application/json;charset=UTF-8");
+            try {
+                response.getOutputStream().print(json.toJSONString());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
+        } else {
+
+            response.setHeader(
+                    "Content-Disposition",
+                    "attachment; filename=meeting"+ meeting.getId() +"-joinUserInfo.xlsx"
+            );
+            Workbook workbook = new HSSFWorkbook();
+            Sheet sheet = workbook.createSheet();
+
+            int row = 1, column = 0;
+
+            Row header = sheet.createRow(0);
+            Set<String> keySet = meeting.getJoinUserInfo().get(0).keySet();
+            for (String key : keySet) {
+                Cell cell = header.createCell(column++);
+                cell.setCellValue(key);
+            }
+
+            column = 0;
+            for (Map<String, Object> one : meeting.getJoinUserInfo()) {
+                Row r = sheet.createRow(row++);
+                for (String key : keySet) {
+                    Object obj = one.get(key);
+                    Cell cell = r.createCell(column++);
+
+                    cell.setCellValue(obj == null ? "null" : obj.toString());
+
+                }
+                column = 0;
+            }
+
+
+            try {
+                workbook.write(response.getOutputStream());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+
     }
 
     /**
@@ -409,7 +440,6 @@ public class MeetingController {
      * @param response the response.
      */
     @GetMapping("/QRCode")
-    @ResponseBody
     public void getQRCode(@RequestParam long id, HttpServletResponse response) {
         String url = "http://" + domain + "/meeting.html?id=" + id;
 
