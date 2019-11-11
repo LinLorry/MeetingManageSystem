@@ -1,3 +1,4 @@
+getProfile();
 getMenus();
 
 window.onload = function() {
