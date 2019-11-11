@@ -1,5 +1,12 @@
 getMenus();
 
+const needFieldMap = {
+    needGender: "性别",
+    needIdCard: "身份证号",
+    needName: "姓名",
+    needOrganization: "工作单位"
+}
+
 var id = getId();
 
 window.onload = function() {
@@ -43,31 +50,15 @@ window.onload = function() {
             star.innerHTML = data.star;
             comment.innerHTML = data.comment;
 
-            if (data.needGender) {
-                let li = document.createElement("li");
-                li.innerHTML = "性别";
-                needList.appendChild(li);
+            for (const key in needFieldMap) {
+                if (data[key]) {
+                    let li = document.createElement("li");
+                    li.innerHTML = needFieldMap[key];
+                    needList.appendChild(li);
+                }
             }
 
-            if (data.needIdCard) {
-                let li = document.createElement("li");
-                li.innerHTML = "身份证号";
-                needList.appendChild(li);
-            }
-
-            if (data.needName) {
-                let li = document.createElement("li");
-                li.innerHTML = "姓名";
-                needList.appendChild(li);
-            }
-
-            if (data.needOrganization) {
-                let li = document.createElement("li");
-                li.innerHTML = "工作单位";
-                needList.appendChild(li);
-            }
-
-                if (needList.children.length == 0) {
+            if (needList.children.length == 0) {
                 document.getElementById("need-list-li").style.display = "none";
             }
 
