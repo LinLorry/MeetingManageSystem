@@ -1,4 +1,4 @@
-const meetingFields = ["time", "location", "start", "hotel", "comment"];
+const meetingFields = ["location", "star", "hotel", "comment"];
 
 function judgeLogin() {
     let token = localStorage.token;

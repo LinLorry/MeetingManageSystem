@@ -20,7 +20,7 @@ window.onload = function() {
 }
 
 function extractMeetings(url, tbody) {
-    fetch(url, { method: "GET" })
+    fetch(url, { method: "GET" , headers: { "Authorization": "Meeting " + localStorage.token}})
     .then(response => response.json())
     .then(function(json) {
         if (json.status === 1) {
@@ -33,6 +33,10 @@ function extractMeetings(url, tbody) {
                 a.innerHTML = elem.name;
                 name.appendChild(a);
                 tr.appendChild(name);
+
+                let time = document.createElement("td");
+                time.innerHTML = getDateString(elem.time);
+                tr.appendChild(time);
 
                 meetingFields.forEach(key => {
                     let td = document.createElement("td");

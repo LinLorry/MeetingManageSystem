@@ -48,6 +48,10 @@ function query() {
                 name.appendChild(a);
                 tr.appendChild(name);
 
+                let time = document.createElement("td");
+                time.innerHTML = getDateString(element.time);
+                tr.appendChild(time);
+
                 meetingFields.forEach(key => {
                     let td = document.createElement("td");
                     td.innerHTML = element[key];
