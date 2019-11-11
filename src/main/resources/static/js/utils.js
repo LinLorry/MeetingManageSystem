@@ -20,3 +20,13 @@ function judgeLogin() {
         window.location.href = "/index.html";
     }
 }
+
+function getDateString(time) {
+    let date = new Date(time);
+
+    return date.getFullYear() + '年' 
+    + date.getMonth() + '月' 
+    + date.getDay() + '日' 
+    + date.getHours() + '点' 
+    + date.getMinutes() + '分';
+}
