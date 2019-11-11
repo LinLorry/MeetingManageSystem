@@ -1,5 +1,4 @@
 getMenus();
-const meetingFields = ["name", "time", "location", "start", "hotel", "comment"];
 
 window.onload = function() {
     loadMenus();
@@ -27,6 +26,14 @@ function extractMeetings(url, tbody) {
         if (json.status === 1) {
             json.data.forEach(elem => {
                 let tr = document.createElement("tr");
+                
+                let name = document.createElement("td");
+                let a = document.createElement("a");
+                a.href = "/meeting.html?id=" + elem.id; 
+                a.innerHTML = elem.name;
+                name.appendChild(a);
+                tr.appendChild(name);
+
                 meetingFields.forEach(key => {
                     let td = document.createElement("td");
                     td.innerHTML = elem[key];

@@ -39,28 +39,20 @@ function query() {
             queryResult.innerHTML = "";
             json.data.forEach(element => {
                 let tr = document.createElement("tr");
-                let name = document.createElement("td");
-                let time = document.createElement("time");
-                let location = document.createElement("td");
-                let star = document.createElement("td");
-                let hotel = document.createElement("td");
-                let comment = document.createElement("td");
-
                 tr.id = "meeting-" + element.id;
-                name.innerHTML = element.name;
-                time.innerHTML = element.time;
-                location.innerHTML = element.location;
-                star.innerHTML = element.star;
-                hotel.innerHTML = element.hotel;
-                comment.innerHTML = element.comment;
 
+                let name = document.createElement("td");
+                let a = document.createElement("a");
+                a.href = "/meeting.html?id=" + element.id; 
+                a.innerHTML = element.name;
+                name.appendChild(a);
                 tr.appendChild(name);
-                tr.appendChild(time);
-                tr.appendChild(location);
-                tr.appendChild(star);
-                tr.appendChild(hotel);
-                tr.appendChild(comment);
 
+                meetingFields.forEach(key => {
+                    let td = document.createElement("td");
+                    td.innerHTML = element[key];
+                    tr.appendChild(td);
+                });
                 queryResult.appendChild(tr);
             })
         }
