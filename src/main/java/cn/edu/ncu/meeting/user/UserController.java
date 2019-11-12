@@ -25,6 +25,39 @@ public class UserController {
 
     private final UserService userService;
 
+    private final static List<Map<String, String>> menus;
+
+    private final static List<Map<String, String>> adminMenus;
+
+    static {
+        menus = new ArrayList<>();
+        Map<String, String> map;
+
+        String[] fieldAndUrl = {
+                "首页", "/index.html",
+                "个人信息", "/user/profile.html",
+                "创建会议", "/meeting/create.html",
+                "查询会议", "/meeting/query.html",
+                "我的会议", "/user/myMeetings.html",
+                "我参加的会议", "/user/myJoinMeetings.html"
+        };
+
+        for (int i = 0; i < fieldAndUrl.length - 1; i+=2) {
+            map = new HashMap<>();
+            map.put("name", fieldAndUrl[i]);
+            map.put("url", fieldAndUrl[i + 1]);
+            menus.add(map);
+        }
+
+        adminMenus = new ArrayList<>(menus);
+
+        map = new HashMap<>();
+        map.put("name", "系统管理");
+        map.put("url", "/admin.html");
+
+        adminMenus.add(map);
+    }
+
     public UserController(TokenUtil tokenUtil, UserService userService) {
         this.tokenUtil = tokenUtil;
         this.userService = userService;
@@ -242,40 +275,14 @@ public class UserController {
     @GetMapping("/menus")
     public JSONObject getMenus() {
         JSONObject response = new JSONObject();
-        List<Map<String, String>> list = new ArrayList<>();
-        Map<String, String> map =new HashMap<>();
-
-        map.put("name", "首页");
-        map.put("url", "/index.html");
-        list.add(map);
-
-        map = new HashMap<>();
-        map.put("name", "查询会议");
-        map.put("url", "/query.html");
-        list.add(map);
-
-        map = new HashMap<>();
-        map.put("name", "个人信息");
-        map.put("url", "/profile.html");
-        list.add(map);
-
-        if (!(
-                SecurityUtil.getAuthorities().isEmpty()
-        )) {
-            map = new HashMap<>();
-            map.put("name", "系统管理");
-            map.put("url", "/admin.html");
-            list.add(map);
-        }
-
-        map = new HashMap<>();
-        map.put("name", "登出");
-        map.put("url", "/logout.html");
-        list.add(map);
 
         response.put("status", 1);
         response.put("message", "Get Menus Success!");
-        response.put("data", list);
+        if (!(SecurityUtil.getAuthorities().isEmpty())) {
+            response.put("data", adminMenus);
+        } else {
+            response.put("data", menus);
+        }
 
         return response;
     }
@@ -305,6 +312,4 @@ public class UserController {
 
         return response;
     }
-
-
 }
