@@ -1,39 +1,27 @@
 getMenus();
 
 window.onload = function() {
-    loadMenus();
+    this.getProfile();
+    this.loadMenus();
 
-    let stronge = window.localStorage;
-    let url = "/api/user/profile";
+    if  (this.localStorage.profile === this.undefined || this.localStorage.profile.length === 0) {
+        this.location.href = "/login.html";
+    }
 
+    let profile = this.JSON.parse(this.localStorage.profile);
     let profileForm = this.document.getElementById("profile-form");
 
-    fetch(url, {
-        headers: {
-            "Authorization": "Meeting " + stronge.token
-        },
-        method: "GET"
-    })
-    .then(function(response) {
-        if (response.ok) {
-            return response.json();
-        }
-        window.location.href = "/login.html";
-    })
-    .then(function(json) {
-        if (json.status == 1) {
-            const data = json.data;
-            profileForm.name.value = data.name;
-            if (data.sex == 'male') {
-                profileForm.male.checked = true;
-            } else {
-                profileForm.female.checked = true;
-            }
+    profileForm.name.value = profile.name;
+    this.console.log(profile.gender);
+    if (profile.gender) {
+        profileForm.female.checked = true;
+    } else {
+        profileForm.male.checked = true;
+    }
 
-            profileForm.organization.value = data.organization;
-            profileForm.phoneNumber.value = data.phoneNumber;
-        }
-    })
+    profileForm.organization.value = profile.organization;
+    profileForm.phoneNumber.value = profile.phoneNumber;
+    profileForm.idCard.value = profile.idCard;
 }
 
 function editProfile() {
@@ -44,9 +32,10 @@ function editProfile() {
 
     let data = {
         name: profileForm.name.value,
-        sex: profileForm.male.checked ? 1 : 2,
+        gender: profileForm.female.checked,
         organization: profileForm.organization.value,
-        phoneNumber: profileForm.phoneNumber.value
+        phoneNumber: profileForm.phoneNumber.value,
+        idCard: profileForm.idCard.value
     }
 
     fetch(url, {
@@ -62,6 +51,9 @@ function editProfile() {
         var hint = document.getElementById("hint");
         hint.style.display = "block"; 
         hint.innerHTML = json.message;
+        if (json.status === 1) {
+            window.localStorage.profile = JSON.stringify(json.data);
+        }
     })
 }
 
