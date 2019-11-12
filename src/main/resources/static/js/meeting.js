@@ -14,41 +14,34 @@ window.onload = function() {
 
     if (id === this.undefined) return;
 
-    let url = new URL("/api/meeting/get", "http://" + document.domain);
+    let getMeetingUrl = new this.URL("/api/meeting/get", "http://" + document.domain);
+    let getHoldUser = new this.URL("/api/meeting/getHoldUser", "http://" + document.domain);
 
-    url.searchParams.append("id", id);
-    let token = this.localStorage.token;
-    let headers;
+    getMeetingUrl.searchParams.append("id", id);
+    getHoldUser.searchParams.append("id", id);
 
-    if (token != null && token != "") {
-        headers = {
-            "Authorization": "Meeting " + token
-        };
-    }
-
-    this.fetch(url, {
-        method: "GET",
-        headers: headers
-    })
+    this.fetch(getMeetingUrl, { method: "GET" })
     .then(response => response.json())
     .then(function(json) {
         if (json.status == 1) {
             let data = json.data[0];
 
             let name = document.getElementById("name");
-            let hostUser = document.getElementById("host-user");
             let time = document.getElementById("time");
-            let location = document.getElementById("location");
-            let star = document.getElementById("star");
-            let comment = document.getElementById("comment");
             let needList = document.getElementById("need-list");
 
             name.innerHTML = data.name;
-            hostUser.innerHTML = data.holdUser.name;
             time.innerHTML = getDateString(data.time)
-            location.innerHTML = data.location;
-            star.innerHTML = data.star;
-            comment.innerHTML = data.comment;
+
+            meetingFields.forEach(key => {
+                const i = data[key];
+                let field = document.getElementById(key);
+                if (i === null) {
+                    field.innerHTML = "无";
+                } else {
+                    field.innerHTML = i;
+                }
+            });
 
             for (const key in needFieldMap) {
                 if (data[key]) {
@@ -74,6 +67,15 @@ window.onload = function() {
             message.style.fontSize = "1.4em";
             commonBox.innerHTML = ""
             commonBox.appendChild(message);
+        }
+    })
+
+    this.fetch(getHoldUser, { method: "GET" })
+    .then(response => response.json())
+    .then(function(json) {
+        if (json.status === 1) {
+            let holdUser = document.getElementById("host-user");
+            holdUser.innerHTML = json.data.username;
         }
     })
 }
