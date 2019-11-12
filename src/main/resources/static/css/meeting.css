@@ -23,3 +23,13 @@
     display: none;
 }
 
+.qrcode-box {
+    width: 100%;
+    text-align: center;
+}
+
+#qrcode {
+    width: 20%;
+}
+
+

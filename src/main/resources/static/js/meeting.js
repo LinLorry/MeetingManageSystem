@@ -11,6 +11,7 @@ var id = getId();
 
 window.onload = function() {
     loadMenus();
+    qrcode.src = "/api/meeting/QRCode?id=" + id;
 
     if (id === this.undefined) return;
 
