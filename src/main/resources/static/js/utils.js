@@ -31,6 +31,7 @@ function getMenus() {
     .then(function(json) {
         if (json.status == 1) {
             window.localStorage.menus = JSON.stringify(json.data);
+            loadMenus();
         }
     });
 }
