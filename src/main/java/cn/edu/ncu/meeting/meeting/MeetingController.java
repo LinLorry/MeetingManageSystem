@@ -199,6 +199,31 @@ public class MeetingController {
     }
 
     /**
+     * Cancel Join Meeting Api
+     * @param id the meeting id.
+     * @return {
+     *     "status": 1,
+     *     "message": "Cancel join meeting success."
+     * }
+     */
+    @GetMapping("/cancelJoin")
+    @ResponseBody
+    public JSONObject cancelJoinMeeting(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+        Meeting meeting = meetingService.loadMeetingById(id);
+
+        MeetingJoinUser meetingJoinUser = new MeetingJoinUser();
+        meetingJoinUser.setMeeting(meeting);
+        meetingJoinUser.setUser(SecurityUtil.getUser());
+
+        meetingService.removeJoinUserFromMeeting(meetingJoinUser);
+        response.put("status", 1);
+        response.put("message", "Cancel join meeting success.");
+
+        return response;
+    }
+
+    /**
      * Get Meeting Join User Info Excel File Api.
      * @param id the meeting id.
      * @param response the response.
