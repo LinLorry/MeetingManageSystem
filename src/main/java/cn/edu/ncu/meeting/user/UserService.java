@@ -63,17 +63,19 @@ public class UserService implements UserDetailsService {
 
     /**
      * Update User
-     * @param user the user will be update
+     * @param id the user will be update id.
      * @param json the user data.
      */
-    void updateUser(User user, JSONObject json) {
+    User updateUser(long id, JSONObject json) {
+        User user = loadUserById(id);
+
         user.setName(json.getString("name"));
         user.setIdCard(json.getString("idCard"));
         user.setGender(json.getBooleanValue("gender"));
         user.setOrganization(json.getString("organization"));
         user.setPhoneNumber(json.getString("phoneNumber"));
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /**

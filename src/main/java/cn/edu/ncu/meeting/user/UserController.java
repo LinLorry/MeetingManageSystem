@@ -166,10 +166,8 @@ public class UserController {
     @PostMapping("/profile")
     public JSONObject editProfile(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-        User user = SecurityUtil.getUser();
-
         try {
-            userService.updateUser(user, request);
+            User user = userService.updateUser(SecurityUtil.getUserId(), request);
             response.put("status", 1);
             response.put("message", "Update profile success.");
             response.put("data", user);
