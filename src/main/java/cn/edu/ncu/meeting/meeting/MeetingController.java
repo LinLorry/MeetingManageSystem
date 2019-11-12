@@ -206,7 +206,7 @@ public class MeetingController {
      *     "message": "Cancel join meeting success."
      * }
      */
-    @GetMapping("/cancelJoin")
+    @PostMapping("/cancelJoin")
     @ResponseBody
     public JSONObject cancelJoinMeeting(@RequestParam long id) {
         JSONObject response = new JSONObject();
