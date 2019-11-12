@@ -52,6 +52,14 @@ function loadMenus() {
     
             select_ul.appendChild(li);
         });
+
+        let li = this.document.createElement("li");
+        let a = this.document.createElement("a");
+        li.appendChild(a);
+
+        a.innerHTML = "登出";
+        a.href = "javascript:logout()";
+        select_ul.appendChild(li);
     }
 }
 
@@ -89,4 +97,11 @@ function getDateString(time) {
     + date.getDay() + '日' 
     + date.getHours() + '点' 
     + date.getMinutes() + '分';
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("menus");
+    localStorage.removeItem("profile");
+    location.href="/index.html";
 }
