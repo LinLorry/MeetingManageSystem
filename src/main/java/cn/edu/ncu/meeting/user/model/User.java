@@ -43,11 +43,9 @@ public class User implements Serializable, UserDetails {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
     private Set<UserRole> userRoleSet = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<MeetingJoinUser> meetingJoinUserSet = new HashSet<>();
 
     public long getId() {
@@ -116,22 +114,12 @@ public class User implements Serializable, UserDetails {
         this.phoneNumber = phoneNumber;
     }
 
-    public Set<UserRole> getUserRoleSet() {
-        return userRoleSet;
-    }
-
-    public void setUserRoleSet(Set<UserRole> userRoleSet) {
-        this.userRoleSet = userRoleSet;
-    }
-
+    @JsonIgnore
     public Set<MeetingJoinUser> getMeetingJoinUserSet() {
         return meetingJoinUserSet;
     }
 
-    public void setMeetingJoinUserSet(Set<MeetingJoinUser> meetingJoinUserSet) {
-        this.meetingJoinUserSet = meetingJoinUserSet;
-    }
-
+    @JsonIgnore
     public Set<Meeting> getJoinMeeting() {
         Set<Meeting> set = new HashSet<>();
         for (MeetingJoinUser meetingJoinUser : meetingJoinUserSet) {
