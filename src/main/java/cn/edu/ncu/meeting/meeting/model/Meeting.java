@@ -54,7 +54,6 @@ public class Meeting implements Serializable {
     private User holdUser;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<MeetingJoinUser> joinUserSet = new HashSet<>();
 
     /**
@@ -72,6 +71,7 @@ public class Meeting implements Serializable {
      *      ...
      * ]
      */
+    @JsonIgnore
     public List<Map<String, Object>> getJoinUserInfo() {
         List<Map<String, Object>> list = new ArrayList<>();
 
@@ -204,6 +204,7 @@ public class Meeting implements Serializable {
         this.needGender = needGender;
     }
 
+    @JsonIgnore
     public User getHoldUser() {
         return holdUser;
     }
@@ -212,6 +213,7 @@ public class Meeting implements Serializable {
         this.holdUser = holdUser;
     }
 
+    @JsonIgnore
     public Set<MeetingJoinUser> getJoinUserSet() {
         return joinUserSet;
     }
