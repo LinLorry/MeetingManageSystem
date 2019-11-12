@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -90,6 +91,20 @@ public class MeetingService {
         Transaction tx = session.beginTransaction();
 
         session.persist(meetingJoinUser);
+
+        tx.commit();
+        session.close();
+    }
+
+    /**
+     * Remove Meeting Join User
+     * @param meetingJoinUser the Meeting Join User will be delete.
+     */
+    void removeJoinUserFromMeeting(MeetingJoinUser meetingJoinUser) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        session.delete(session.merge(meetingJoinUser));
 
         tx.commit();
         session.close();

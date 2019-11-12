@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The Meeting Model
@@ -56,8 +54,59 @@ public class Meeting implements Serializable {
     private User holdUser;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<MeetingJoinUser> joinUserSet = new HashSet<>();
+
+    /**
+     * Get Meeting Join User Info.
+     * @return [
+     *      {
+     *          "needHotel": bool,
+     *          "checkIn": bool,
+     *          ["name": String: if needName is true,]
+     *          ["gender": bool: if needGender is true,]
+     *          ["participateTime": Timestamp: if needParticipateTime is true,]
+     *          ["idCard": String: if needIdCard is true,]
+     *          ["organization": if needOrganization is true]
+     *      },
+     *      ...
+     * ]
+     */
+    @JsonIgnore
+    public List<Map<String, Object>> getJoinUserInfo() {
+        List<Map<String, Object>> list = new ArrayList<>();
+
+        for (MeetingJoinUser meetingJoinUser : joinUserSet) {
+            User user = meetingJoinUser.getUser();
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("needHotel", meetingJoinUser.isNeedHotel());
+            map.put("checkIn", meetingJoinUser.isCheckIn());
+
+            if (needName) {
+                map.put("name", user.getName());
+            }
+
+            if (needGender) {
+                map.put("gender", user.isGender());
+            }
+
+            if (needParticipateTime) {
+                map.put("participateTime", meetingJoinUser.getParticipateTime());
+            }
+
+            if (needIdCard) {
+                map.put("idCard", user.getIdCard());
+            }
+
+            if (needOrganization) {
+                map.put("organization", user.getOrganization());
+            }
+
+            list.add(map);
+        }
+
+        return list;
+    }
 
     public long getId() {
         return id;
@@ -155,6 +204,7 @@ public class Meeting implements Serializable {
         this.needGender = needGender;
     }
 
+    @JsonIgnore
     public User getHoldUser() {
         return holdUser;
     }
@@ -163,6 +213,7 @@ public class Meeting implements Serializable {
         this.holdUser = holdUser;
     }
 
+    @JsonIgnore
     public Set<MeetingJoinUser> getJoinUserSet() {
         return joinUserSet;
     }

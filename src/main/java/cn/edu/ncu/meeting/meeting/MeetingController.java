@@ -6,18 +6,24 @@ import cn.edu.ncu.meeting.util.QRCodeUtil;
 import cn.edu.ncu.meeting.util.SecurityUtil;
 import cn.edu.ncu.meeting.user.model.User;
 import com.alibaba.fastjson.JSONObject;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * Meeting Controller
@@ -93,6 +99,44 @@ public class MeetingController {
     }
 
     /**
+     * Get Join Meeting User Api.
+     * @param id the meeting id.
+     * @return if get join user success return {
+     *     "status": 1,
+     *     "message": "Get meeting join users success.",
+     *     "data": [
+     *          {
+     *              user data
+     *          },
+     *          ...
+     *     ]
+     * } else if return {
+     *     "status": 0,
+     *     "message": message: String
+     * }
+     */
+    @GetMapping("/join")
+    @ResponseBody
+    public JSONObject getJoinUsers(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        Meeting meeting = meetingService.loadMeetingById(id);
+
+        if (meeting.getHoldUser().getId() != SecurityUtil.getUserId() &&
+                SecurityUtil.getAuthorities().isEmpty()) {
+            response.put("status", 0);
+            response.put("message", "You can't get join this meeting user info.");
+            return response;
+        }
+
+        response.put("status", 1);
+        response.put("message", "Get meeting join users success.");
+        response.put("data", meeting.getJoinUserInfo());
+
+        return response;
+    }
+
+    /**
      * User Join Meeting Api
      * @param request {
      *      "meetingId": meetingId: String,
@@ -155,6 +199,93 @@ public class MeetingController {
     }
 
     /**
+     * Cancel Join Meeting Api
+     * @param id the meeting id.
+     * @return {
+     *     "status": 1,
+     *     "message": "Cancel join meeting success."
+     * }
+     */
+    @PostMapping("/cancelJoin")
+    @ResponseBody
+    public JSONObject cancelJoinMeeting(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+        Meeting meeting = meetingService.loadMeetingById(id);
+
+        MeetingJoinUser meetingJoinUser = new MeetingJoinUser();
+        meetingJoinUser.setMeeting(meeting);
+        meetingJoinUser.setUser(SecurityUtil.getUser());
+
+        meetingService.removeJoinUserFromMeeting(meetingJoinUser);
+        response.put("status", 1);
+        response.put("message", "Cancel join meeting success.");
+
+        return response;
+    }
+
+    /**
+     * Get Meeting Join User Info Excel File Api.
+     * @param id the meeting id.
+     * @param response the response.
+     */
+    @GetMapping("/getJoinExcel")
+    public void getJoinUsersExcel(@RequestParam long id, HttpServletResponse response) {
+        Meeting meeting = meetingService.loadMeetingById(id);
+        if (meeting.getHoldUser().getId() != SecurityUtil.getUserId() &&
+                SecurityUtil.getAuthorities().isEmpty()) {
+            JSONObject json = new JSONObject();
+            json.put("status", 0);
+            json.put("message", "You can't get join this meeting user info.");
+
+            response.setHeader("Content-Type", "application/json;charset=UTF-8");
+            try {
+                response.getOutputStream().print(json.toJSONString());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
+        } else {
+
+            response.setHeader(
+                    "Content-Disposition",
+                    "attachment; filename=meeting"+ meeting.getId() +"-joinUserInfo.xlsx"
+            );
+            Workbook workbook = new HSSFWorkbook();
+            Sheet sheet = workbook.createSheet();
+
+            int row = 1, column = 0;
+
+            Row header = sheet.createRow(0);
+            Set<String> keySet = meeting.getJoinUserInfo().get(0).keySet();
+            for (String key : keySet) {
+                Cell cell = header.createCell(column++);
+                cell.setCellValue(key);
+            }
+
+            column = 0;
+            for (Map<String, Object> one : meeting.getJoinUserInfo()) {
+                Row r = sheet.createRow(row++);
+                for (String key : keySet) {
+                    Object obj = one.get(key);
+                    Cell cell = r.createCell(column++);
+
+                    cell.setCellValue(obj == null ? "null" : obj.toString());
+
+                }
+                column = 0;
+            }
+
+
+            try {
+                workbook.write(response.getOutputStream());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+
+    }
+
+    /**
      * Get Meeting Api
      * @param id meeting id == this.
      * @param name meeting name contains this.
@@ -207,6 +338,26 @@ public class MeetingController {
             response.put("message", "Get Meeting Failed.");
         }
 
+        return response;
+    }
+
+    @ResponseBody
+    @GetMapping("/getHoldUser")
+    public JSONObject getHoldUserInfo(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+        try {
+            JSONObject data = new JSONObject();
+            User user = meetingService.loadMeetingById(id).getHoldUser();
+            data.put("id", user.getId());
+            data.put("username", user.getName());
+
+            response.put("status", 1);
+            response.put("message", "Get meeting hold user info success");
+            response.put("data", data);
+        } catch (NoSuchElementException e) {
+            response.put("status", 0);
+            response.put("message", "This Meeting isn't exist.");
+        }
         return response;
     }
 
@@ -334,7 +485,6 @@ public class MeetingController {
      * @param response the response.
      */
     @GetMapping("/QRCode")
-    @ResponseBody
     public void getQRCode(@RequestParam long id, HttpServletResponse response) {
         String url = "http://" + domain + "/meeting.html?id=" + id;
 
