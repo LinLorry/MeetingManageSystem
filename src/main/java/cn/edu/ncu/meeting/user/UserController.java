@@ -288,6 +288,32 @@ public class UserController {
     }
 
     /**
+     * Get Meeting Api.
+     * @return {
+     *     "status": 1,
+     *     "message": "Get meetings success.",
+     *     "data": [
+     *          {
+     *              meeting data
+     *          },
+     *          ...
+     *     ]
+     * }
+     */
+    @GetMapping("/meetings")
+    @ResponseBody
+    public JSONObject getMeetings() {
+        JSONObject response = new JSONObject();
+        User user = userService.loadUserById(SecurityUtil.getUserId());
+
+        response.put("status", 1);
+        response.put("message", "Get meetings success.");
+        response.put("data", user.getMyMeetings());
+
+        return response;
+    }
+
+    /**
      * Get Join Meeting Api.
      * @return {
      *     "status": 1,
@@ -308,7 +334,7 @@ public class UserController {
 
         response.put("status", 1);
         response.put("message", "Get join meetings success.");
-        response.put("data", user.getJoinMeeting());
+        response.put("data", user.getJoinMeetings());
 
         return response;
     }

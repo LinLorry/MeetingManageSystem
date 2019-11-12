@@ -45,6 +45,9 @@ public class User implements Serializable, UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserRole> userRoleSet = new HashSet<>();
 
+    @OneToMany(mappedBy = "holdUser")
+    private Set<Meeting> myMeetings = new HashSet<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<MeetingJoinUser> meetingJoinUserSet = new HashSet<>();
 
@@ -120,7 +123,12 @@ public class User implements Serializable, UserDetails {
     }
 
     @JsonIgnore
-    public Set<Meeting> getJoinMeeting() {
+    public Set<Meeting> getMyMeetings() {
+        return myMeetings;
+    }
+
+    @JsonIgnore
+    public Set<Meeting> getJoinMeetings() {
         Set<Meeting> set = new HashSet<>();
         for (MeetingJoinUser meetingJoinUser : meetingJoinUserSet) {
             set.add(meetingJoinUser.getMeeting());
