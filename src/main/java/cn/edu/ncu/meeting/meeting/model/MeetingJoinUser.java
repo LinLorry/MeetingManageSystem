@@ -48,7 +48,6 @@ public class MeetingJoinUser implements Serializable {
     }
 
     public void setMeeting(Meeting meeting) {
-        System.out.println(meeting.getId());
         this.meeting = meeting;
     }
 
@@ -57,8 +56,6 @@ public class MeetingJoinUser implements Serializable {
     }
 
     public void setUser(User user) {
-        System.out.println(user.getId());
-
         this.user = user;
     }
 
