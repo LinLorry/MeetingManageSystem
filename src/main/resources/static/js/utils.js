@@ -37,8 +37,12 @@ function getMenus() {
 }
 
 function loadMenus() {
+    if (localStorage.menus === undefined){
+        return ;
+    }
+
     let select_ul = document.getElementById("select-ul");
-    let menus = this.JSON.parse(window.localStorage.menus);
+    let menus = this.JSON.parse(localStorage.menus);
 
     if (menus.length != 0) {
         select_ul.innerHTML = "";
