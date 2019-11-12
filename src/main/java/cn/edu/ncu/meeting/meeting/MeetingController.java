@@ -341,6 +341,26 @@ public class MeetingController {
         return response;
     }
 
+    @ResponseBody
+    @GetMapping("/getHoldUser")
+    public JSONObject getHoldUserInfo(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+        try {
+            JSONObject data = new JSONObject();
+            User user = meetingService.loadMeetingById(id).getHoldUser();
+            data.put("id", user.getId());
+            data.put("username", user.getName());
+
+            response.put("status", 1);
+            response.put("message", "Get meeting hold user info success");
+            response.put("data", data);
+        } catch (NoSuchElementException e) {
+            response.put("status", 0);
+            response.put("message", "This Meeting isn't exist.");
+        }
+        return response;
+    }
+
     /**
      * Get Hot Meeting Api.
      * @param page the page number.
