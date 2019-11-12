@@ -35,11 +35,11 @@ public class UserController {
 
         String[] fieldAndUrl = {
                 "首页", "/index.html",
-                "个人信息", "/user/profile.html",
-                "创建会议", "/meeting/create.html",
-                "查询会议", "/meeting/query.html",
-                "我的会议", "/user/myMeetings.html",
-                "我参加的会议", "/user/myJoinMeetings.html"
+                "个人信息", "/profile.html",
+                "创建会议", "/create.html",
+                "查询会议", "/query.html",
+                "我的会议", "/myMeetings.html",
+                "我参加的会议", "/myJoinMeetings.html"
         };
 
         for (int i = 0; i < fieldAndUrl.length - 1; i+=2) {
