@@ -47,8 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
             .authorizeRequests()
-                .antMatchers("/api/user/token", "/api/user/registry").permitAll()
-                .antMatchers("/api/user/**").authenticated()
+                .antMatchers(
+                        "/api/user/token", "/api/user/registry",
+                        "/api/meeting/get", "/api/meeting/getHot",
+                        "/api/meeting/getNewest", "/api/meeting/getStartSoon",
+                        "/api/meeting/getHoldUser", "/api/meeting/QRCode").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .and()
             .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
