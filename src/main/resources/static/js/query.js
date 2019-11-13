@@ -1,15 +1,28 @@
 getMenus();
 
-window.onload = loadMenus;
+window.onload = function() {
+    this.loadMenus();
+    let afterDateBox = this.createDateBox();
+    let beforeDateBox = this.createDateBox();
+    let separated = this.document.createElement("span")
+
+    afterDateBox.id = "after-date-box";
+    beforeDateBox.id = "before-date-box";
+    separated.textContent = " - ";
+
+    let dateSelectBox = this.document.getElementById("date-select-box");
+    dateSelectBox.appendChild(afterDateBox);
+    dateSelectBox.appendChild(separated);
+    dateSelectBox.appendChild(beforeDateBox);
+};
 
 function query() {
-    let regex = /^\d{4}-\d{2}-\d{2}$/
     let url = new URL("/api/meeting/get", "http://" + document.domain);
 
     let id = document.getElementById("id").value;
     let name = document.getElementById("name").value;
-    let after = document.getElementById("after").value;
-    let before = document.getElementById("before").value;
+    let after = stringifyDate(document.getElementById("after-date-box"));
+    let before = stringifyDate(document.getElementById("before-date-box"));
     let location = document.getElementById("location").value;
 
     let token = window.localStorage.token;
@@ -17,8 +30,8 @@ function query() {
 
     if (id != "") url.searchParams.append("id", id);
     if (name != "") url.searchParams.append("name", name);
-    if (regex.test(after)) url.searchParams.append("after", after + " 00:00:00");
-    if (regex.test(before)) url.searchParams.append("before", before + " 00:00:00");
+    url.searchParams.append("after", after);
+    url.searchParams.append("before", before);
     if (location != "") url.searchParams.append("loaction", location);
 
     if (token != null && token != "") {

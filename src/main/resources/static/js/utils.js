@@ -109,3 +109,125 @@ function logout() {
     localStorage.removeItem("profile");
     location.href="/index.html";
 }
+
+function createDateBox() {
+    let div = document.createElement("div");
+    div.style.display = "inline";    
+    let yearLabel = document.createElement("label");
+    let monthLabel = document.createElement("label");
+    let dayLabel = document.createElement("label");
+
+    let yearSelect = document.createElement("select");
+    let monthSelect = document.createElement("select");
+    let daySelect = document.createElement("select");
+
+    div.appendChild(yearLabel);
+    div.appendChild(monthLabel);
+    div.appendChild(dayLabel);
+
+    for (var i = 2000; i < 2050; i++)
+    {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        yearSelect.appendChild(option);
+    } 
+
+    for (var i = 1; i < 13; i++)
+    {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        monthSelect.appendChild(option);
+    }
+
+    for (var i = 1; i < 32; i++)
+    {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        daySelect.appendChild(option);
+    }
+
+    yearLabel.appendChild(yearSelect);
+    yearLabel.innerHTML = yearLabel.innerHTML + " 年";
+    monthLabel.appendChild(monthSelect);
+    monthLabel.innerHTML = monthLabel.innerHTML + " 月";
+    dayLabel.appendChild(daySelect);
+    dayLabel.innerHTML = dayLabel.innerHTML + " 日";
+
+    return div;
+}
+
+function createTimeBox() {
+    let div = createDateBox();
+    let hourLabel = document.createElement("label");
+    let minuteLabel = document.createElement("label");
+
+    let hourSelect = document.createElement("select");
+    let minuteSelect = document.createElement("select");
+
+    div.appendChild(hourLabel);
+    div.appendChild(minuteLabel);
+
+    for (var i = 0; i < 25; i++)
+    {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        hourSelect.appendChild(option);
+    }
+
+    for (var i = 0; i < 61; i++)
+    {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        minuteSelect.appendChild(option);
+    }
+
+    hourLabel.appendChild(hourSelect);
+    hourLabel.innerHTML = hourLabel.innerHTML + " 点";
+    minuteLabel.appendChild(minuteSelect);
+    minuteLabel.innerHTML = minuteLabel.innerHTML + " 分";
+
+    return div;
+}
+
+function stringifyDate(date) {
+    let yearSelect = date.childNodes[0].childNodes[0];
+    let monthSelect = date.childNodes[1].childNodes[0];
+    let daySelect = date.childNodes[2].childNodes[0];
+
+    let year = yearSelect.options[yearSelect.selectedIndex].value;
+    let month = monthSelect.options[monthSelect.selectedIndex].value;
+    let day = daySelect.options[daySelect.selectedIndex].value;
+
+    let result = new Date(year, month, day, 8).toISOString();
+
+    result = result.replace('T', ' ');
+    result = result.replace('Z', ' ');
+    
+    return result;
+}
+
+function stringifyTime(date) {
+    let yearSelect = date.childNodes[0].childNodes[0];
+    let monthSelect = date.childNodes[1].childNodes[0];
+    let daySelect = date.childNodes[2].childNodes[0];
+    let hourSelect = date.childNodes[2].childNodes[0];
+    let minuteSelect = date.childNodes[2].childNodes[0];
+
+    let year = yearSelect.options[yearSelect.selectedIndex].value;
+    let month = monthSelect.options[monthSelect.selectedIndex].value;
+    let day = daySelect.options[daySelect.selectedIndex].value;
+    let hour = hourSelect.options[hourSelect.selectedIndex].value;
+    let minute = minuteSelect.options[minuteSelect.selectedIndex].value;
+
+    let result = new Date(year, month, day, hour + 8, minute).toISOString();
+
+    result = result.replace('T', ' ');
+    result = result.replace('Z', ' ');
+
+    return result;
+}
