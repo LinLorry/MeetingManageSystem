@@ -208,7 +208,7 @@ function stringifyDate(date) {
     result = result.replace('T', ' ');
     result = result.replace('Z', ' ');
     
-    return result;
+    return result.split(".")[0];
 }
 
 function stringifyTime(date) {
@@ -229,5 +229,5 @@ function stringifyTime(date) {
     result = result.replace('T', ' ');
     result = result.replace('Z', ' ');
 
-    return result;
+    return result.split(".")[0];
 }
