@@ -42,9 +42,8 @@
 }
 
 #footer-box {
-    position: fixed;
     display: flex;
-    width: 80%;
+    width: 100%;
     bottom: 0;
     text-align: center;
     box-sizing: border-box;
