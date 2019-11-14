@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Meeting Controller
@@ -149,9 +146,9 @@ public class MeetingController {
      * } else if hold user want join his meeting return {
      *     "status": 0,
      *     "message": "Hold User can't join meeting."
-     * } else if meeting need participate time but participate time is null return {
+     * } else if meeting need data but don't have provide {
      *     "status": 0,
-     *     "message": "Need Participate Time."
+     *     "message": message: String
      * } else if meeting isn't exist return {
      *     "status": 0,
      *     "message": "This Meeting isn't exist."
@@ -164,34 +161,65 @@ public class MeetingController {
     @PostMapping("/join")
     public JSONObject join(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-
-        Meeting meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
+        ArrayList<String> needResult = new ArrayList<>();
         User user = SecurityUtil.getUser();
+
         boolean needHotel = request.getBooleanValue("needHotel");
         Timestamp participate = request.getTimestamp("participateTime");
 
+        Meeting meeting;
         try {
-            if (meeting.getHoldUser().getId() == user.getId()) {
-                response.put("status", 0);
-                response.put("message", "Hold User can't join meeting.");
-            } else if (participate == null && meeting.isNeedParticipateTime()) {
-                response.put("status", 0);
-                response.put("message", "Need Participate Time.");
-            } else {
-                MeetingJoinUser meetingJoinUser = new MeetingJoinUser(
-                        meeting, user, needHotel, participate, false
-                );
-                meetingService.addJoinUserIntoMeeting(meetingJoinUser);
-                response.put("status", 1);
-                response.put("message", "Sign Up Success.");
-            }
-
+            meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
         } catch (NoSuchElementException e) {
             response.put("status", 0);
             response.put("message", "This Meeting isn't exist.");
-        } catch (Exception e) {
+            return response;
+        }
+
+        if (meeting.getHoldUser().getId() == user.getId()) {
             response.put("status", 0);
-            response.put("message", "Sign Up Failed.");
+            response.put("message", "Hold User can't join meeting.");
+            return response;
+        }
+
+        if (meeting.isNeedParticipateTime() && participate == null) {
+            needResult.add(" Participate Time");
+        }
+        if (meeting.isNeedIdCard() &&
+                (user.getIdCard() == null || user.getIdCard().length() == 0)) {
+            needResult.add(" Id Card");
+        }
+        if (meeting.isNeedName() &&
+                (user.getName() == null || user.getName().length() == 0)) {
+            needResult.add(" Name");
+        }
+        if (meeting.isNeedOrganization() &&
+                (user.getOrganization() == null || user.getOrganization().length() == 0)) {
+            needResult.add(" Organization");
+        }
+        if (meeting.isNeedPhoneNumber() &&
+                (user.getPhoneNumber() == null || user.getPhoneNumber().length() == 0)) {
+            needResult.add(" Phone Number");
+        }
+
+        if (needResult.size() == 0) {
+            MeetingJoinUser meetingJoinUser = new MeetingJoinUser(
+                    meeting, user, needHotel, participate, false
+            );
+            meetingService.addJoinUserIntoMeeting(meetingJoinUser);
+            response.put("status", 1);
+            response.put("message", "Sign Up Success.");
+        } else {
+            StringBuilder stringBuilder = new StringBuilder("Can't join this meeting, Need");
+
+            for (String s : needResult) {
+                stringBuilder.append(s);
+                stringBuilder.append(",");
+            }
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+
+            response.put("status", 0);
+            response.put("message", stringBuilder.toString());
         }
 
         return response;
