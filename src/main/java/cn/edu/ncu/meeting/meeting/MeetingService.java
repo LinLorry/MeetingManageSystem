@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -197,5 +196,15 @@ public class MeetingService {
         meetingRepository.delete(
                 meetingRepository.findById(id).orElseThrow(NoSuchElementException::new)
         );
+    }
+
+    /**
+     * Check User Have Join Meeting.
+     * @param meetingId the meeting id.
+     * @param userId the user id.
+     * @return if the user have join meeting return true, else return false.
+     */
+    boolean checkUserJoinMeeting(long meetingId, long userId) {
+        return meetingRepository.existsByMeetingIdAndUserId(meetingId, userId);
     }
 }

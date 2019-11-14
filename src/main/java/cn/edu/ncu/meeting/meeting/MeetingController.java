@@ -515,4 +515,25 @@ public class MeetingController {
             logger.error(e);
         }
     }
+
+    /**
+     * Have Join Meeting Api.
+     * @param id the meeting id.
+     * @return {
+     *     "status": 1,
+     *     "message": "Check join Success.",
+     *     "data": have join: boolean
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/haveJoin")
+    public JSONObject haveJoin(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Check join Success.");
+        response.put("data", meetingService.checkUserJoinMeeting(id, SecurityUtil.getUserId()));
+
+        return response;
+    }
 }
