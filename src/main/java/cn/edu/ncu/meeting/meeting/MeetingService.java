@@ -199,6 +199,26 @@ public class MeetingService {
     }
 
     /**
+     * Meeting Check In
+     * @param meetingId the meeting id.
+     * @param userId the user id.
+     */
+    void checkIn(long meetingId, long userId) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        loadMeetingById(meetingId).getJoinUserSet().forEach(meetingJoinUser -> {
+            if (meetingJoinUser.getUser().getId() == userId) {
+                meetingJoinUser.setCheckIn(true);
+                session.update(session.merge(meetingJoinUser));
+            }
+        });
+
+        tx.commit();
+        session.close();
+    }
+
+    /**
      * Check User Have Join Meeting.
      * @param meetingId the meeting id.
      * @param userId the user id.

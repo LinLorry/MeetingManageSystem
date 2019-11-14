@@ -194,7 +194,6 @@ public class MeetingController {
             response.put("message", "Sign Up Failed.");
         }
 
-
         return response;
     }
 
@@ -514,6 +513,34 @@ public class MeetingController {
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    /**
+     * Check In Api.
+     * @param id the meeting id.
+     * @return If meeting exist and user have join in this meeting return {
+     *     "status": 1,
+     *     "message": "Check in Success."
+     * } else return {
+     *     "status": 0,
+     *     "message": "You can't check in this meeting."
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/checkIn")
+    public JSONObject checkIn(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        if (meetingService.checkUserJoinMeeting(id, SecurityUtil.getUserId())) {
+            meetingService.checkIn(id, SecurityUtil.getUserId());
+            response.put("status", 1);
+            response.put("message", "Check in Success.");
+        } else {
+            response.put("status", 0);
+            response.put("message", "You can't check in this meeting.");
+        }
+
+        return response;
     }
 
     /**
