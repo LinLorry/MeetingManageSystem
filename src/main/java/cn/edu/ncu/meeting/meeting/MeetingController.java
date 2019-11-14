@@ -341,6 +341,21 @@ public class MeetingController {
         return response;
     }
 
+    /**
+     * Get Hold User Info Api.
+     * @param id the meeting id.
+     * @return If meeting exist return  {
+     *     "status": 1,
+     *     "message": "Get meeting hold user info success",
+     *     "data": {
+     *         "id": the user id: long,
+     *         "username": the username: String
+     *     }
+     * } else return {
+     *     "status": 0,
+     *     "message": "This Meeting isn't exist."
+     * }
+     */
     @ResponseBody
     @GetMapping("/getHoldUser")
     public JSONObject getHoldUserInfo(@RequestParam long id) {
