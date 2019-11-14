@@ -36,7 +36,7 @@ function extractMeetings(url, tbody) {
                 tr.appendChild(name);
 
                 let time = document.createElement("td");
-                time.innerHTML = getDateString(elem.time);
+                time.innerHTML = parseDate(elem.time);
                 tr.appendChild(time);
 
                 meetingFields.forEach(key => {

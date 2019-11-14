@@ -62,7 +62,7 @@ function query() {
                 tr.appendChild(name);
 
                 let time = document.createElement("td");
-                time.innerHTML = getDateString(element.time);
+                time.innerHTML = parseDate(element.time);
                 tr.appendChild(time);
 
                 meetingFields.forEach(key => {

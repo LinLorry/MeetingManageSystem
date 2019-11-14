@@ -93,16 +93,6 @@ function getUserId() {
     return profile.id;
 }
 
-function getDateString(time) {
-    let date = new Date(time);
-
-    return date.getFullYear() + '年' 
-    + date.getMonth() + '月' 
-    + date.getDay() + '日' 
-    + date.getHours() + '点' 
-    + date.getMinutes() + '分';
-}
-
 function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("menus");
@@ -133,11 +123,11 @@ function createDateBox() {
         yearSelect.appendChild(option);
     } 
 
-    for (var i = 1; i < 13; i++)
+    for (var i = 0; i < 12; i++)
     {
         let option = document.createElement("option");
         option.value = i;
-        option.text = i;
+        option.text = i + 1;
         monthSelect.appendChild(option);
     }
 
@@ -199,9 +189,9 @@ function stringifyDate(date) {
     let monthSelect = date.childNodes[1].childNodes[0];
     let daySelect = date.childNodes[2].childNodes[0];
 
-    let year = yearSelect.options[yearSelect.selectedIndex].value;
-    let month = monthSelect.options[monthSelect.selectedIndex].value;
-    let day = daySelect.options[daySelect.selectedIndex].value;
+    let year = parseInt(yearSelect.options[yearSelect.selectedIndex].value);
+    let month = parseInt(monthSelect.options[monthSelect.selectedIndex].value);
+    let day = parseInt(daySelect.options[daySelect.selectedIndex].value);
 
     let result = new Date(year, month, day, 8).toISOString();
 
@@ -215,14 +205,14 @@ function stringifyTime(date) {
     let yearSelect = date.childNodes[0].childNodes[0];
     let monthSelect = date.childNodes[1].childNodes[0];
     let daySelect = date.childNodes[2].childNodes[0];
-    let hourSelect = date.childNodes[2].childNodes[0];
-    let minuteSelect = date.childNodes[2].childNodes[0];
+    let hourSelect = date.childNodes[3].childNodes[0];
+    let minuteSelect = date.childNodes[4].childNodes[0];
 
-    let year = yearSelect.options[yearSelect.selectedIndex].value;
-    let month = monthSelect.options[monthSelect.selectedIndex].value;
-    let day = daySelect.options[daySelect.selectedIndex].value;
-    let hour = hourSelect.options[hourSelect.selectedIndex].value;
-    let minute = minuteSelect.options[minuteSelect.selectedIndex].value;
+    let year = parseInt(yearSelect.options[yearSelect.selectedIndex].value);
+    let month = parseInt(monthSelect.options[monthSelect.selectedIndex].value);
+    let day = parseInt(daySelect.options[daySelect.selectedIndex].value);
+    let hour = parseInt(hourSelect.options[hourSelect.selectedIndex].value);
+    let minute = parseInt(minuteSelect.options[minuteSelect.selectedIndex].value);
 
     let result = new Date(year, month, day, hour + 8, minute).toISOString();
 
@@ -230,4 +220,15 @@ function stringifyTime(date) {
     result = result.replace('Z', ' ');
 
     return result.split(".")[0];
+}
+
+function parseDate(time) {
+    let re = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
+    let result = re.exec(time);
+
+    return result[1] + '年' 
+        + result[2] + '月' 
+        + result[3] + '日' 
+        + result[4] + '点' 
+        + result[5] + '分';
 }

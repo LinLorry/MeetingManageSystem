@@ -32,7 +32,7 @@ window.onload = function() {
             let needList = document.getElementById("need-list");
 
             name.innerHTML = data.name;
-            time.innerHTML = getDateString(data.time)
+            time.innerHTML = parseDate(data.time)
 
             meetingFields.forEach(key => {
                 const i = data[key];
