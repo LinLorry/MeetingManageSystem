@@ -38,6 +38,8 @@ window.onload = function() {
 
                 deleteButton.onclick = function() { del(elem.id) };
                 deleteButton.innerHTML = "删除";
+
+                tr.id = 'meeting-' + elem.id + '-tr';
             });
         }
     })
@@ -55,5 +57,15 @@ function del(id) {
             'content-type': 'application/json'
         }})
     .then(response => response.json())
-    .then(json => window.alert(json.message));
+    .then(function(json) {
+        let hint = document.getElementById('hint');
+        hint.style.display = 'block'; 
+        hint.innerHTML = json.message;
+        if (json.status == 1) {
+            let tr = document.getElementById('meeting-' + id + '-tr')
+            if (tr !== null) {
+                document.getElementById('meetings-tbody').removeChild(tr);
+            }
+        }
+    });
 }

@@ -39,8 +39,6 @@ window.onload = function() {
                 action.appendChild(unJoinButton);
                 action.appendChild(checkInButton);
 
-
-                unJoinButton.id = 'un-join-' + elem.id + '-button';
                 unJoinButton.onclick = function() { unJoin(elem.id) };
                 unJoinButton.textContent = '不参加';
 
@@ -48,6 +46,8 @@ window.onload = function() {
                 checkInButton.id = 'check-in-' + elem.id + '-button';
                 checkInButton.onclick = function() { checkIn(elem.id) };
                 checkInButton.textContent = '与会打卡';
+
+                tr.id = 'meeting-' + elem.id + '-tr';
             });
         }
     })
@@ -67,9 +67,9 @@ function unJoin(id) {
         hint.style.display = 'block'; 
         hint.innerHTML = json.message;
         if (json.status == 1) {
-            let button = document.getElementById('un-join-' + id + '-button')
-            if (button !== null) {
-                button.style.display = 'none';
+            let tr = document.getElementById('meeting-' + id + '-tr')
+            if (tr !== null) {
+                document.getElementById('meetings-tbody').removeChild(tr);
             }
         }
     });
