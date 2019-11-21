@@ -47,14 +47,12 @@
                         <li id="comment-li">
                             <label>会议简介：<span id="comment"></span></label>
                         </li>
-                        <li>
+                        <li id="join-data-box">
                             <form id="joinBox">
                                 <label id="needHotel-label">
                                     是否需要提供酒店：<input name="needHotel" type="checkbox"/>
                                 </label>
-                                <label id="ParticipateTime-label">
-                                    与会时间：<input name="participateTime" type="text"/>
-                                </label>
+                                <label id="participateTime-label">与会时间：</label>
                             </form>
                         </li>
                         <li id="need-list-li">
@@ -70,8 +68,7 @@
                     </div>
                 </div>
 
-                <div>
-                    <input type="button" onclick="join()" value="参加会议"/>
+                <div id="action-box" style="display: none;">
                 </div>
 
                 <p id="hint"></p>
