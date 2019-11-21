@@ -1,0 +1,36 @@
+
+.registry-ul {
+    list-style-type: none;
+}
+
+.registry-label {
+    display: flex;
+    justify-content: center;
+}
+
+.registry-field-block {
+    text-align: left;
+    display: inline-block;
+    width: 6em;
+}
+
+.input-box {
+    display: inline-block;
+    text-align: center;
+}
+
+.input-box input {
+    height: 1em;
+    display: inline-block;
+    text-align: center;
+}
+
+.flu {
+    z-index: -1;
+    height: 25px;
+}
+
+#hint {
+    
+    display: none;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>创建会议-南昌大学会议管理系统</title>
+        <link rel="stylesheet" type="text/css" href="css/global.css"/>
+        <link rel="stylesheet" type="text/css" href="css/meeting.css"/>
+        <script src="js/utils.js"></script>
+        <script src="js/create.js"></script>
+        
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="title-box">
+                <h1><strong>南昌大学会议管理系统</strong></h1>
+            </div>
+
+            <div id="select-box">
+                <ul id="select-ul">
+                </ul>
+            </div>
+            <div id="comment-box">
+                <div id="create-box">
+                    <form id="createForm">
+                        <ul id="meeting-detail">
+                            <li id="name-li">
+                                <label>会议名称*：<input id="name" name="name" type="text"></input></label>
+                            </li>
+                            <li id="time-li">
+                                <label>会议举办时间*：</label>
+                            </li>
+                            <li id="location-li">
+                                <label>会议举办地点*：<input id="location" name="location" type="text"></input></label>
+                            </li>
+                            <li id="star-li">
+                                <label>出席会议人员：<input id="star" name="star" type="text"></input></label>
+                            </li>
+                            <li id="hotel-li">
+                                <label>酒店：<input id="hotel" name="hotel" type="hotel"></input></label>
+                            </li>
+                            <li id="comment-li">
+                                <label>会议简介：<input id="comment" name="comment" type="text"></input></label>
+                            </li>
+                            <li>
+                                <label>需要参加者提供的信息：</label><br>
+                                <label>名字<input id="needName" name="needName" type="checkbox"></label>
+                                <label>工作单位<input id="needOrganization" name="needOrganization" type="checkbox"></label>
+                                <label>身份证号<input id="needIdCard" name="needIdCard" type="checkbox"></label>
+                                <label>与会时间<input id="needParticipateTime" name="needParticipateTime" type="checkbox"></label>
+                                <label>性别<input id="needGender" name="needGender" type="checkbox"></label>
+                            </li>
+                        </ul>
+                        <div class="flu">
+                            <p id="hint"></p>
+                        </div>
+                        <div>
+                            <input type="button" onclick="create()" value="创建会议"/>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+            <div id="footer-box">
+                <p>meeting</p>
+            </div> 
+        </div>
+    </body>
+</html>

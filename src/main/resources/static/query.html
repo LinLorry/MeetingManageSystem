@@ -2,8 +2,11 @@
 <html>
     <head>
         <title>会议查询-南昌大学会议管理系统</title>
-        <link rel="stylesheet" type="text/css" href="css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="css/global.css"/>
         <link rel="stylesheet" type="text/css" href="css/query.css"/>
+        <script src="js/utils.js"></script>
+        <script src="js/query.js"></script>
+
         <meta charset="utf8"/>
     </head>
     <body>
@@ -13,14 +16,11 @@
             </div>
 
             <div id="select-box">
-                <ul>
-                    <li><a>首页</a> </li>
-                    <li><a>会议查询</a> </li>
-                    <li><a></a> </li>
-                    <li><a>Test 1</a> </li>
-                    <li><a>Test 1</a> </li>
-                    <li><a>Test 1</a> </li>
-                    <li><a>登录</a> </li>
+                <ul id="select-ul">
+                    <li id="index-li"><a id="index-a" href="/index.html">首页</a></li>
+                    <li id="query-li"><a id="query-a" href="/query.html">会议查询</a></li>
+                    <li id="login-li"><a id="login-a" href="/login.html">登录</a></li>
+                    <li id="registry-li"><a id="registry-a" href="/registry.html">注册</a></li>
                 </ul>
             </div>
             <div id="comment-box">
@@ -28,14 +28,16 @@
                     <h2><strong>会议查询</strong></h2>
                 </div>
                 <div id="query-input">
-                    <div class="query-div"><label>会议ID：</label><input type="number" /></div>
-                    <div class="query-div"><label>会议名称：</label><input type="text"/></div>
-                    <div class="query-div"><label>会议时间：</label><input type="datetime-local"/></div>
-                    <div class="query-div"><label>会议地点：</label><input type="text"/></div>
-                    <div class="query-div"><input type="button" value="查询"/></div>
+                    <div class="query-div"><label>会议ID：</label><input id="id" type="number" /></div>
+                    <div class="query-div"><label>会议名称：</label><input id="name" type="text"/></div>
+                    <div id="date-select-box" class="query-div">
+                        <label>会议时间：</label>
+                    </div>
+                    <div class="query-dDiv"><label>会议地点：</label><input id="location" type="text"/></div>
+                    <div class="query-div"><input type="button" value="查询" onclick="query()"/></div>
                     <div class="clear"></div>
                 </div>
-                <div id="query-result">
+                <div id="query-result-box">
                     <table class="meeting-table">
                         <thead>
                             <tr>
@@ -47,17 +49,13 @@
                                 <th>会议简介</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Test</td>
-                                <td>Test time</td>
-                                <td>Test location</td>
-                                <td>Test people</td>
-                                <td>Test room</td>
-                                <td>Test comment</td>
-                            </tr>
+                        <tbody id="query-result">
+                            
                         </tbody>
                     </table>
+                    <div class="flu">
+                        <p id="hint"></p>
+                    </div>
                 </div>
             </div> 
             <div id="footer-box">

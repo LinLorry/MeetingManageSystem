@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>会议详情-南昌大学会议管理系统</title>
+        <link rel="stylesheet" type="text/css" href="css/global.css"/>
+        <link rel="stylesheet" type="text/css" href="css/meeting.css"/>
+        <script src="js/utils.js"></script>
+        <script src="js/meeting.js"></script>
+        
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="title-box">
+                <h1><strong>南昌大学会议管理系统</strong></h1>
+            </div>
+
+            <div id="select-box">
+                <ul id="select-ul">
+                    <li id="index-li"><a id="index-a" href="/index.html">首页</a></li>
+                    <li id="query-li"><a id="query-a" href="/query.html">会议查询</a></li>
+                    <li id="login-li"><a id="login-a" href="/login.html">登录</a></li>
+                    <li id="registry-li"><a id="registry-a" href="/registry.html">注册</a></li>
+                </ul>
+            </div>
+            <div id="comment-box">
+                <div id="meeting-detail-box">
+                    <ul id="meeting-detail">
+                        <li id="name-li">
+                            <label>会议名称：<span id="name"></span></label>
+                        </li>
+                        <li id="host-user-li">
+                            <label>会议举办人：<span id="host-user"></span></label>
+                        </li>
+                        <li id="time-li">
+                            <label>会议举办时间：<span id="time"></span></label>
+                        </li>
+                        <li id="location-li">
+                            <label>会议举办地点：<span id="location"></span></label>
+                        </li>
+                        <li id="star-li">
+                            <label>出席会议人员：<span id="star"></span></label>
+                        </li>
+                        <li id="hotel-li">
+                            <label>酒店：<span id="hotel"></span></label>
+                        </li>
+                        <li id="comment-li">
+                            <label>会议简介：<span id="comment"></span></label>
+                        </li>
+                        <li id="join-data-box">
+                            <form id="joinBox">
+                                <label id="needHotel-label">
+                                    是否需要提供酒店：<input name="needHotel" type="checkbox"/>
+                                </label>
+                                <label id="participateTime-label" style="display: none;">与会时间：</label>
+                            </form>
+                        </li>
+                        <li id="need-list-li">
+                            <label>报名会议会提供的信息：
+                                <ul id="need-list">
+                                </ul>
+                            </label>
+                        </li>
+                        </li>
+                    </ul>
+                    <div class="qrcode-box">
+                        <img src="" id="qrcode">
+                    </div>
+                </div>
+
+                <div id="action-box" style="display: none;">
+                </div>
+
+                <div class="flu">
+                    <p id="hint"></p>
+                </div>
+            </div> 
+            <div id="footer-box">
+                <p>meeting</p>
+            </div> 
+        </div>
+    </body>
+</html>

@@ -69,3 +69,7 @@
 
     padding: 3px 12px 3px 12px;
 }
+
+#hint {
+    display: none;
+}

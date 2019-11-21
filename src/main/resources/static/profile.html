@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>个人信息-南昌大学会议管理系统</title>
+	    <link rel="stylesheet" type="text/css" href="css/global.css"/>
+        <link rel="stylesheet" type="text/css" href="css/profile.css"/>
+        <script src="js/utils.js"></script>
+        <script src="js/profile.js"></script>
+
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="title-box">
+                <h1><strong>南昌大学会议管理系统</strong></h1>
+            </div>
+
+            <div id="select-box">
+                <ul id="select-ul">
+                </ul>
+            </div>
+            <div id="comment-box">
+                <div id="profile-title-box">
+                    <h2><strong>个人信息</strong></h2>
+                </div>
+                <div id="profile-box">
+                    <form id="profile-form">
+                        <p>姓名：<input name="name" type="text"/></p>
+                        <p>
+                            性别：
+                            <input id="male" name="gender" type="radio" value="male"/>男 
+                            <input id="female" name="gender" type="radio" value="female"/>女
+                        </p>
+                        <p>工作单位：<input name="organization" type="text"/></p>
+                        <p>电话号码：<input name="phoneNumber" type="text"/></p>
+                        <p>身份证号：<input name="idCard" type="text"/></p>
+
+                        <input type="button" onclick="editProfile()" value="更新个人信息"/>
+                        <div class="flu">
+                            <p id="hint"></p>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+            <div id="footer-box">
+                <p>meeting</p>
+            </div> 
+        </div>
+    </body>
+</html>

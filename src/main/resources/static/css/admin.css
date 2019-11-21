@@ -1,0 +1,24 @@
+.title-box {
+    border-bottom-color: rgb(119, 136, 153);
+    border-bottom-style: solid;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.comment-box {
+    text-align: left;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.message {
+    text-align: left;
+    list-style: none;
+    margin-left: 0;
+}
+
+.message li {
+    font-size: 1.4em;
+}
