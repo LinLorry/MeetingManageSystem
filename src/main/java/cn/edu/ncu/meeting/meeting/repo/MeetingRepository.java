@@ -32,9 +32,18 @@ public interface MeetingRepository extends CrudRepository<Meeting, Long>, JpaSpe
 
     /**
      * Get not only Immediate Begin but also not over time Meetings
-     * @param pageable the page number
+     * @param pageable the page number.
      * @return Meeting Page.
      */
     @Query(value = "FROM Meeting m WHERE m.time > current_time ORDER BY m.time asc")
     Page<Meeting> findAllImmediatelyBegin(Pageable pageable);
+
+    /**
+     * Exists By Meeting id and User id
+     * @param meetingId the meeting id.
+     * @param UserId the user id.
+     * @return If is exists return true else false.
+     */
+    @Query(value = "SELECT CASE WHEN COUNT(r) > 0 THEN TRUE ELSE FALSE END FROM MeetingJoinUser r WHERE r.meeting.id = ?1 AND r.user.id = ?2")
+    boolean existsByMeetingIdAndUserId(Long meetingId, Long UserId);
 }

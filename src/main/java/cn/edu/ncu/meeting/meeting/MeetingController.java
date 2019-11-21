@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Meeting Controller
@@ -149,9 +146,9 @@ public class MeetingController {
      * } else if hold user want join his meeting return {
      *     "status": 0,
      *     "message": "Hold User can't join meeting."
-     * } else if meeting need participate time but participate time is null return {
+     * } else if meeting need data but don't have provide {
      *     "status": 0,
-     *     "message": "Need Participate Time."
+     *     "message": message: String
      * } else if meeting isn't exist return {
      *     "status": 0,
      *     "message": "This Meeting isn't exist."
@@ -164,36 +161,66 @@ public class MeetingController {
     @PostMapping("/join")
     public JSONObject join(@RequestBody JSONObject request) {
         JSONObject response = new JSONObject();
-
-        Meeting meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
+        ArrayList<String> needResult = new ArrayList<>();
         User user = SecurityUtil.getUser();
+
         boolean needHotel = request.getBooleanValue("needHotel");
         Timestamp participate = request.getTimestamp("participateTime");
 
+        Meeting meeting;
         try {
-            if (meeting.getHoldUser().getId() == user.getId()) {
-                response.put("status", 0);
-                response.put("message", "Hold User can't join meeting.");
-            } else if (participate == null && meeting.isNeedParticipateTime()) {
-                response.put("status", 0);
-                response.put("message", "Need Participate Time.");
-            } else {
-                MeetingJoinUser meetingJoinUser = new MeetingJoinUser(
-                        meeting, user, needHotel, participate, false
-                );
-                meetingService.addJoinUserIntoMeeting(meetingJoinUser);
-                response.put("status", 1);
-                response.put("message", "Sign Up Success.");
-            }
-
+            meeting = meetingService.loadMeetingById(request.getInteger("meetingId"));
         } catch (NoSuchElementException e) {
             response.put("status", 0);
             response.put("message", "This Meeting isn't exist.");
-        } catch (Exception e) {
-            response.put("status", 0);
-            response.put("message", "Sign Up Failed.");
+            return response;
         }
 
+        if (meeting.getHoldUser().getId() == user.getId()) {
+            response.put("status", 0);
+            response.put("message", "Hold User can't join meeting.");
+            return response;
+        }
+
+        if (meeting.isNeedParticipateTime() && participate == null) {
+            needResult.add(" Participate Time");
+        }
+        if (meeting.isNeedIdCard() &&
+                (user.getIdCard() == null || user.getIdCard().length() == 0)) {
+            needResult.add(" Id Card");
+        }
+        if (meeting.isNeedName() &&
+                (user.getName() == null || user.getName().length() == 0)) {
+            needResult.add(" Name");
+        }
+        if (meeting.isNeedOrganization() &&
+                (user.getOrganization() == null || user.getOrganization().length() == 0)) {
+            needResult.add(" Organization");
+        }
+        if (meeting.isNeedPhoneNumber() &&
+                (user.getPhoneNumber() == null || user.getPhoneNumber().length() == 0)) {
+            needResult.add(" Phone Number");
+        }
+
+        if (needResult.size() == 0) {
+            MeetingJoinUser meetingJoinUser = new MeetingJoinUser(
+                    meeting, user, needHotel, participate, false
+            );
+            meetingService.addJoinUserIntoMeeting(meetingJoinUser);
+            response.put("status", 1);
+            response.put("message", "Sign Up Success.");
+        } else {
+            StringBuilder stringBuilder = new StringBuilder("Can't join this meeting, Need");
+
+            for (String s : needResult) {
+                stringBuilder.append(s);
+                stringBuilder.append(",");
+            }
+            stringBuilder.setCharAt(stringBuilder.length() - 1, '.');
+
+            response.put("status", 0);
+            response.put("message", stringBuilder.toString());
+        }
 
         return response;
     }
@@ -341,6 +368,21 @@ public class MeetingController {
         return response;
     }
 
+    /**
+     * Get Hold User Info Api.
+     * @param id the meeting id.
+     * @return If meeting exist return  {
+     *     "status": 1,
+     *     "message": "Get meeting hold user info success",
+     *     "data": {
+     *         "id": the user id: long,
+     *         "username": the username: String
+     *     }
+     * } else return {
+     *     "status": 0,
+     *     "message": "This Meeting isn't exist."
+     * }
+     */
     @ResponseBody
     @GetMapping("/getHoldUser")
     public JSONObject getHoldUserInfo(@RequestParam long id) {
@@ -499,5 +541,54 @@ public class MeetingController {
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    /**
+     * Check In Api.
+     * @param id the meeting id.
+     * @return If meeting exist and user have join in this meeting return {
+     *     "status": 1,
+     *     "message": "Check in Success."
+     * } else return {
+     *     "status": 0,
+     *     "message": "You can't check in this meeting."
+     * }
+     */
+    @ResponseBody
+    @PostMapping("/checkIn")
+    public JSONObject checkIn(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        if (meetingService.checkUserJoinMeeting(id, SecurityUtil.getUserId())) {
+            meetingService.checkIn(id, SecurityUtil.getUserId());
+            response.put("status", 1);
+            response.put("message", "Check in Success.");
+        } else {
+            response.put("status", 0);
+            response.put("message", "You can't check in this meeting.");
+        }
+
+        return response;
+    }
+
+    /**
+     * Have Join Meeting Api.
+     * @param id the meeting id.
+     * @return {
+     *     "status": 1,
+     *     "message": "Check join Success.",
+     *     "data": have join: boolean
+     * }
+     */
+    @ResponseBody
+    @GetMapping("/haveJoin")
+    public JSONObject haveJoin(@RequestParam long id) {
+        JSONObject response = new JSONObject();
+
+        response.put("status", 1);
+        response.put("message", "Check join Success.");
+        response.put("data", meetingService.checkUserJoinMeeting(id, SecurityUtil.getUserId()));
+
+        return response;
     }
 }

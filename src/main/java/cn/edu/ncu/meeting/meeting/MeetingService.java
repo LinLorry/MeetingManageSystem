@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -116,7 +115,7 @@ public class MeetingService {
      * @return Meeting which id is param.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
      */
-    Meeting loadMeetingById(long id) throws NoSuchElementException {
+    public Meeting loadMeetingById(long id) throws NoSuchElementException {
         return meetingRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
@@ -193,9 +192,39 @@ public class MeetingService {
      * @param id the meeting which will be delete id.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
      */
-    void removeMeetingById(long id) throws NoSuchElementException {
+    public void removeMeetingById(long id) throws NoSuchElementException {
         meetingRepository.delete(
                 meetingRepository.findById(id).orElseThrow(NoSuchElementException::new)
         );
+    }
+
+    /**
+     * Meeting Check In
+     * @param meetingId the meeting id.
+     * @param userId the user id.
+     */
+    void checkIn(long meetingId, long userId) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        loadMeetingById(meetingId).getJoinUserSet().forEach(meetingJoinUser -> {
+            if (meetingJoinUser.getUser().getId() == userId) {
+                meetingJoinUser.setCheckIn(true);
+                session.update(session.merge(meetingJoinUser));
+            }
+        });
+
+        tx.commit();
+        session.close();
+    }
+
+    /**
+     * Check User Have Join Meeting.
+     * @param meetingId the meeting id.
+     * @param userId the user id.
+     * @return if the user have join meeting return true, else return false.
+     */
+    boolean checkUserJoinMeeting(long meetingId, long userId) {
+        return meetingRepository.existsByMeetingIdAndUserId(meetingId, userId);
     }
 }

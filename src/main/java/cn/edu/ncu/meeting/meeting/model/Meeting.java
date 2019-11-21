@@ -50,6 +50,9 @@ public class Meeting implements Serializable {
     @Column(columnDefinition = "Boolean default false")
     private boolean needGender = false;
 
+    @Column(columnDefinition = "Boolean default false")
+    private boolean needPhoneNumber = false;
+
     @ManyToOne
     private User holdUser;
 
@@ -202,6 +205,14 @@ public class Meeting implements Serializable {
 
     public void setNeedGender(boolean needGender) {
         this.needGender = needGender;
+    }
+
+    public boolean isNeedPhoneNumber() {
+        return needPhoneNumber;
+    }
+
+    public void setNeedPhoneNumber(boolean needPhoneNumber) {
+        this.needPhoneNumber = needPhoneNumber;
     }
 
     @JsonIgnore
