@@ -12,3 +12,13 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.message {
+    text-align: left;
+    list-style: none;
+    margin-left: 0;
+}
+
+.message li {
+    font-size: 1.4em;
+}
