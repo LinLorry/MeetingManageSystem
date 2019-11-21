@@ -115,7 +115,7 @@ public class MeetingService {
      * @return Meeting which id is param.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
      */
-    Meeting loadMeetingById(long id) throws NoSuchElementException {
+    public Meeting loadMeetingById(long id) throws NoSuchElementException {
         return meetingRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
@@ -192,7 +192,7 @@ public class MeetingService {
      * @param id the meeting which will be delete id.
      * @throws NoSuchElementException if meeting doesn't exist, throw this exception.
      */
-    void removeMeetingById(long id) throws NoSuchElementException {
+    public void removeMeetingById(long id) throws NoSuchElementException {
         meetingRepository.delete(
                 meetingRepository.findById(id).orElseThrow(NoSuchElementException::new)
         );
