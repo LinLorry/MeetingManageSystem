@@ -3,3 +3,7 @@
     border-bottom-style: solid;
     border-bottom-width: 3px;
 }
+
+#meetings-table {
+    width: 100%;
+}
