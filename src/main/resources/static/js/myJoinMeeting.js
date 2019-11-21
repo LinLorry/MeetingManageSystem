@@ -32,20 +32,20 @@ window.onload = function() {
                 });
 
                 let action = document.createElement('td');
-                let unJoinButton = document.createElement('button');
-                let checkInButton = document.createElement('button');
-
                 tr.appendChild(action);
-                action.appendChild(unJoinButton);
-                action.appendChild(checkInButton);
 
+                let unJoinButton = document.createElement('button');
+                action.appendChild(unJoinButton);
                 unJoinButton.onclick = function() { unJoin(elem.id) };
                 unJoinButton.textContent = '不参加';
 
-                // TODO when have check unappend this.
-                checkInButton.id = 'check-in-' + elem.id + '-button';
-                checkInButton.onclick = function() { checkIn(elem.id) };
-                checkInButton.textContent = '与会打卡';
+                if (!elem.checkIn) {
+                    let checkInButton = document.createElement('button');
+                    action.appendChild(checkInButton);
+                    checkInButton.id = 'check-in-' + elem.id + '-button';
+                    checkInButton.onclick = function() { checkIn(elem.id) };
+                    checkInButton.textContent = '与会打卡';
+                }
 
                 tr.id = 'meeting-' + elem.id + '-tr';
             });
