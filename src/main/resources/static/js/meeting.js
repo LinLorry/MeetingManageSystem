@@ -72,7 +72,7 @@ window.onload = function() {
             }
 
             if (data.needParticipateTime) {
-                document.getElementById('ParticipateTime-label').style.display = 'block';
+                document.getElementById('participateTime-label').style.display = 'block';
             }
         } else {
             let commonBox = document.getElementById('comment-box');
@@ -122,11 +122,8 @@ window.onload = function() {
                     })
                     .then(response => response.json())
                     .then(function(json) {
-                        console.log(json.data);
                         if (json.status === 1) {
-                            console.log('I');
                             if (!json.data) {
-                                console.log('II');
                                 let joinButton = document.createElement("button");
                                 actionBox.appendChild(joinButton);
     
