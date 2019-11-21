@@ -2,15 +2,14 @@ package cn.edu.ncu.meeting.user.model;
 
 import cn.edu.ncu.meeting.meeting.model.Meeting;
 import cn.edu.ncu.meeting.meeting.model.MeetingJoinUser;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The User model.
@@ -127,13 +126,41 @@ public class User implements Serializable, UserDetails {
         return myMeetings;
     }
 
+    /**
+     * Get User Join Meeting Info
+     * @return [
+     *      {
+     *          "id": meeting id: long,
+     *          "name": meeting name: String,
+     *          "location": location: String,
+     *          "time": meeting hold time: Timestamp,
+     *          "hotel": meeting hold hotel: String,
+     *          "comment": meeting comment: String,
+     *          "checkIn": have user check in: Boolean
+     *      },
+     *      ...
+     * ]
+     */
     @JsonIgnore
-    public Set<Meeting> getJoinMeetings() {
-        Set<Meeting> set = new HashSet<>();
+    public List<JSONObject> getJoinMeetings() {
+        List<JSONObject> result = new ArrayList<>(meetingJoinUserSet.size());
         for (MeetingJoinUser meetingJoinUser : meetingJoinUserSet) {
-            set.add(meetingJoinUser.getMeeting());
+            JSONObject one = new JSONObject();
+            final Meeting meeting = meetingJoinUser.getMeeting();
+
+            one.put("id", meeting.getId());
+            one.put("name", meeting.getName());
+            one.put("location", meeting.getLocation());
+            one.put("time", meeting.getTime());
+            one.put("star", meeting.getStar());
+            one.put("hotel", meeting.getHotel());
+            one.put("comment", meeting.getComment());
+
+            one.put("checkIn", meetingJoinUser.isCheckIn());
+
+            result.add(one);
         }
-        return set;
+        return result;
     }
 
     @Override

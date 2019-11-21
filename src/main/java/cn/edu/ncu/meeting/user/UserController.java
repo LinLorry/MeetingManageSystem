@@ -320,7 +320,13 @@ public class UserController {
      *     "message": "Get join meetings success.",
      *     "data": [
      *          {
-     *              meeting data
+     *              "id": meeting id: long,
+     *              "name": meeting name: String,
+     *              "location": location: String,
+     *              "time": meeting hold time: Timestamp,
+     *              "hotel": meeting hold hotel: String,
+     *              "comment": meeting comment: String,
+     *              "checkIn": have user check in: Boolean
      *          },
      *          ...
      *     ]
