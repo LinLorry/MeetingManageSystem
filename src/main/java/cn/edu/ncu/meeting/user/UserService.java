@@ -121,4 +121,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User doesn't exits."));
     }
+
+    /**
+     * Remove User By Id
+     * @param id the user id.
+     */
+    void removeUserById(long id) {
+        userRepository.deleteById(id);
+    }
 }
