@@ -68,3 +68,7 @@
     color: black;
     text-decoration: none; 
 }
+
+#hint {
+    display: none;
+}

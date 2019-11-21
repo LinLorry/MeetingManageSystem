@@ -1,13 +1,13 @@
-const meetingFields = ["location", "star", "hotel", "comment"];
+const meetingFields = ['location', 'star', 'hotel', 'comment'];
 
 function getProfile() {
-    let url = "/api/user/profile";
+    let url = '/api/user/profile';
     let headers = {
-        "Authorization": "Meeting " + localStorage.token
+        'Authorization': 'Meeting ' + localStorage.token
     };
 
     fetch(url, {
-        method: "GET",
+        method: 'GET',
         headers: headers
     })
     .then(response => response.json())
@@ -19,13 +19,13 @@ function getProfile() {
 }
 
 function getMenus() {
-    let url = "/api/user/menus";
+    let url = '/api/user/menus';
 
     fetch(url, {
         headers: {
-            "Authorization": "Meeting " + window.localStorage.token
+            'Authorization': 'Meeting ' + window.localStorage.token
         },
-        method: "GET"
+        method: 'GET'
     })
     .then(response => response.json())
     .then(function(json) {
@@ -41,14 +41,14 @@ function loadMenus() {
         return ;
     }
 
-    let select_ul = document.getElementById("select-ul");
+    let select_ul = document.getElementById('select-ul');
     let menus = this.JSON.parse(localStorage.menus);
 
     if (menus.length != 0) {
-        select_ul.innerHTML = "";
+        select_ul.innerHTML = '';
         menus.forEach(element => {
-            let li = this.document.createElement("li");
-            let a = this.document.createElement("a");
+            let li = this.document.createElement('li');
+            let a = this.document.createElement('a');
             li.appendChild(a);
     
             a.innerHTML = element.name;
@@ -57,34 +57,34 @@ function loadMenus() {
             select_ul.appendChild(li);
         });
 
-        let li = this.document.createElement("li");
-        let a = this.document.createElement("a");
+        let li = this.document.createElement('li');
+        let a = this.document.createElement('a');
         li.appendChild(a);
 
-        a.innerHTML = "登出";
-        a.href = "javascript:logout()";
+        a.innerHTML = '登出';
+        a.href = 'javascript:logout()';
         select_ul.appendChild(li);
     }
 }
 
 function judgeLogin() {
     let token = localStorage.token;
-    let userProfileURL = "/api/user/profile";
+    let userProfileURL = '/api/user/profile';
 
-    if (token != ""  && token != null) {
+    if (token != ''  && token != null) {
         fetch(userProfileURL, {
             headers: {
-                "Authorization": "Meeting " + token
+                'Authorization': 'Meeting ' + token
             },
-            method: "GET"
+            method: 'GET'
         })
         .then(function(response) {
             if(response.ok) {
-                window.location.href = "/index.html";
+                window.location.href = '/index.html';
             }
         })
     } else {
-        window.location.href = "/index.html";
+        window.location.href = '/index.html';
     }
 }
 
@@ -94,22 +94,22 @@ function getUserId() {
 }
 
 function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("menus");
-    localStorage.removeItem("profile");
-    location.href="/index.html";
+    localStorage.removeItem('token');
+    localStorage.removeItem('menus');
+    localStorage.removeItem('profile');
+    location.href='/index.html';
 }
 
 function createDateBox() {
-    let div = document.createElement("div");
-    div.style.display = "inline";    
-    let yearLabel = document.createElement("label");
-    let monthLabel = document.createElement("label");
-    let dayLabel = document.createElement("label");
+    let div = document.createElement('div');
+    div.style.display = 'inline';    
+    let yearLabel = document.createElement('label');
+    let monthLabel = document.createElement('label');
+    let dayLabel = document.createElement('label');
 
-    let yearSelect = document.createElement("select");
-    let monthSelect = document.createElement("select");
-    let daySelect = document.createElement("select");
+    let yearSelect = document.createElement('select');
+    let monthSelect = document.createElement('select');
+    let daySelect = document.createElement('select');
 
     div.appendChild(yearLabel);
     div.appendChild(monthLabel);
@@ -117,7 +117,7 @@ function createDateBox() {
 
     for (var i = 2000; i < 2050; i++)
     {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.value = i;
         option.text = i;
         yearSelect.appendChild(option);
@@ -125,7 +125,7 @@ function createDateBox() {
 
     for (var i = 0; i < 12; i++)
     {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.value = i;
         option.text = i + 1;
         monthSelect.appendChild(option);
@@ -133,36 +133,36 @@ function createDateBox() {
 
     for (var i = 1; i < 32; i++)
     {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.value = i;
         option.text = i;
         daySelect.appendChild(option);
     }
 
     yearLabel.appendChild(yearSelect);
-    yearLabel.innerHTML = yearLabel.innerHTML + " 年";
+    yearLabel.innerHTML = yearLabel.innerHTML + ' 年';
     monthLabel.appendChild(monthSelect);
-    monthLabel.innerHTML = monthLabel.innerHTML + " 月";
+    monthLabel.innerHTML = monthLabel.innerHTML + ' 月';
     dayLabel.appendChild(daySelect);
-    dayLabel.innerHTML = dayLabel.innerHTML + " 日";
+    dayLabel.innerHTML = dayLabel.innerHTML + ' 日';
 
     return div;
 }
 
 function createTimeBox() {
     let div = createDateBox();
-    let hourLabel = document.createElement("label");
-    let minuteLabel = document.createElement("label");
+    let hourLabel = document.createElement('label');
+    let minuteLabel = document.createElement('label');
 
-    let hourSelect = document.createElement("select");
-    let minuteSelect = document.createElement("select");
+    let hourSelect = document.createElement('select');
+    let minuteSelect = document.createElement('select');
 
     div.appendChild(hourLabel);
     div.appendChild(minuteLabel);
 
     for (var i = 0; i < 25; i++)
     {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.value = i;
         option.text = i;
         hourSelect.appendChild(option);
@@ -170,16 +170,16 @@ function createTimeBox() {
 
     for (var i = 0; i < 61; i++)
     {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.value = i;
         option.text = i;
         minuteSelect.appendChild(option);
     }
 
     hourLabel.appendChild(hourSelect);
-    hourLabel.innerHTML = hourLabel.innerHTML + " 点";
+    hourLabel.innerHTML = hourLabel.innerHTML + ' 点';
     minuteLabel.appendChild(minuteSelect);
-    minuteLabel.innerHTML = minuteLabel.innerHTML + " 分";
+    minuteLabel.innerHTML = minuteLabel.innerHTML + ' 分';
 
     return div;
 }
@@ -198,7 +198,7 @@ function stringifyDate(date) {
     result = result.replace('T', ' ');
     result = result.replace('Z', ' ');
     
-    return result.split(".")[0];
+    return result.split('.')[0];
 }
 
 function stringifyTime(date) {
@@ -219,7 +219,7 @@ function stringifyTime(date) {
     result = result.replace('T', ' ');
     result = result.replace('Z', ' ');
 
-    return result.split(".")[0];
+    return result.split('.')[0];
 }
 
 function parseDate(time) {
@@ -231,4 +231,10 @@ function parseDate(time) {
         + result[3] + '日' 
         + result[4] + '点' 
         + result[5] + '分';
+}
+
+function disposeHint(message) {
+    let hint = document.getElementById('hint');
+    hint.textContent = message;
+    hint.style.display = 'block';
 }

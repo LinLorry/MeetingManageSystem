@@ -192,9 +192,7 @@ function join() {
     })
     .then(response => response.json())
     .then(function(json) {
-        var hint = document.getElementById('hint');
-        hint.style.display = 'block'; 
-        hint.textContent = json.message;
+        disposeHint(json.message);
         if (json.status === 1) {
             document.getElementById('action-box').style.display = 'none';
         }

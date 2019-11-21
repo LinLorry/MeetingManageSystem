@@ -1,5 +1,5 @@
 function registry() {
-    let url = "/api/user/registry";
+    let url = '/api/user/registry';
     let username = registryForm.username.value;
     let password = registryForm.password.value;
     let repassword = registryForm.repassword.value;
@@ -8,19 +8,15 @@ function registry() {
     let female = registryForm.gender[1].checked;
     let idCard = registryForm.idCard.value;
     let organization = registryForm.organization.value;
-    let hint = document.getElementById("hint");
 
     if (username.length === 0) {
-        hint.style.display = "block";
-        hint.innerHTML = "用户名不能为空！"
+        disposeHint('用户名不能为空！');
         return;
     } else if (password.length === 0) {
-        hint.style.display = "block";
-        hint.innerHTML = "密码不能为空！"
+        disposeHint('用户名不能为空！');
         return;
     } else if (password !== repassword) {
-        hint.style.display = "block";
-        hint.innerHTML = "两次输入密码不一致！"
+        disposeHint('用户名不能为空！');
         return;
     }
 
@@ -52,16 +48,15 @@ function registry() {
         headers: {
             'content-type': 'application/json;charset=UTF-8'
         },
-        method: "POST"
+        method: 'POST'
     })
     .then(response => response.json())
     .then(function(json) {
         console.log(json.status);
         if (json.status === 1) {
-            window.location.href = "/login.html";
+            window.location.href = '/login.html';
         } else {
-            hint.style.display = "block";
-            hint.innerHTML = json.message;
+            disposeHint(json.message);
         }
     })
 }

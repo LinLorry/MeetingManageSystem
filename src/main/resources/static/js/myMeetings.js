@@ -58,9 +58,7 @@ function del(id) {
         }})
     .then(response => response.json())
     .then(function(json) {
-        let hint = document.getElementById('hint');
-        hint.style.display = 'block'; 
-        hint.innerHTML = json.message;
+        disposeHint(json.message);
         if (json.status == 1) {
             let tr = document.getElementById('meeting-' + id + '-tr')
             if (tr !== null) {

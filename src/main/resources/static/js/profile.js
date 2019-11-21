@@ -48,9 +48,7 @@ function editProfile() {
     })
     .then(response => response.json())
     .then(function(json) {
-        var hint = document.getElementById("hint");
-        hint.style.display = "block"; 
-        hint.innerHTML = json.message;
+        disposeHint(json.message);
         if (json.status === 1) {
             window.localStorage.profile = JSON.stringify(json.data);
         }

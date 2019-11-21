@@ -28,13 +28,9 @@ function create() {
     let needGender = createForm.needGender.checked;
 
     if (name.length === 0) {
-        hint.style.display = "block";
-        hint.innerHTML = "会议名不能为空！"
-        return;
+        disposeHint('会议名不能为空！');
     } else if (location.length === 0) {
-        hint.style.display = "block";
-        hint.innerHTML = "地点不能为空！"
-        return;
+        disposeHint('地点不能为空！');
     }
 
     let data = JSON.stringify({
@@ -58,8 +54,6 @@ function create() {
     })
     .then(response => response.json())
     .then(function(json) {
-        let hint = document.getElementById("hint");
-        hint.style.display = "block"; 
-        hint.innerHTML = json.message;
+        disposeHint(json.message);
     })
 }
