@@ -6,7 +6,7 @@ window.onload = function() {
 
     let getStartSoonUrl = "/api/meeting/getStartSoon";
     let getNewestUrl = "/api/meeting/getNewest";
-    let getHotUrl = "/api/meeting/getNewest";
+    let getHotUrl = "/api/meeting/getHot";
 
     let startSoonMeeitngsTbody = 
         this.document.getElementById("start-soon-meeitngs-tbody");
