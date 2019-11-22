@@ -82,6 +82,9 @@ public class Meeting implements Serializable {
             User user = meetingJoinUser.getUser();
             Map<String, Object> map = new HashMap<>();
 
+            map.put("id", user.getId());
+            map.put("username", user.getUsername());
+
             map.put("needHotel", meetingJoinUser.isNeedHotel());
             map.put("checkIn", meetingJoinUser.isCheckIn());
 
