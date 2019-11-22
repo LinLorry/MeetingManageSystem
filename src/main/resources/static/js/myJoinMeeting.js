@@ -34,12 +34,13 @@ window.onload = function() {
                 let action = document.createElement('td');
                 tr.appendChild(action);
 
-                let unJoinButton = document.createElement('button');
-                action.appendChild(unJoinButton);
-                unJoinButton.onclick = function() { unJoin(elem.id) };
-                unJoinButton.textContent = '不参加';
-
                 if (!elem.checkIn) {
+                    let unJoinButton = document.createElement('button');
+                    action.appendChild(unJoinButton);
+                    unJoinButton.id = 'un-join-' + elem.id + '-button';
+                    unJoinButton.onclick = function() { unJoin(elem.id) };
+                    unJoinButton.textContent = '不参加';
+
                     let checkInButton = document.createElement('button');
                     action.appendChild(checkInButton);
                     checkInButton.id = 'check-in-' + elem.id + '-button';
@@ -85,9 +86,14 @@ function checkIn(id) {
     .then(function(json) {
         disposeHint(json.message);
         if (json.status == 1) {
-            let button = document.getElementById('check-in-' + id + '-button')
-            if (button !== null) {
-                button.style.display = 'none';
+            let unJoinButton = document.getElementById('un-join-' + id + '-button');
+            let checkInButton = document.getElementById('check-in-' + id + '-button');
+            if (unJoinButton !== null) {
+                unJoinButton.style.display = 'none';
+            }
+
+            if (checkInButton !== null) {
+                checkInButton.style.display = 'none';
             }
         }
     });
