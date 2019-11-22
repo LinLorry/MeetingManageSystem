@@ -94,18 +94,12 @@ window.onload = function() {
 
             if (profile !== null) {
                 if (json.data.id === profile.id) {
-                    let showJoinUrl = '/meetingJoin.html?id=' + id;
                     let downloadExcel = document.createElement("button");
-                    let showJoin = document.createElement("button");
     
                     actionBox.appendChild(downloadExcel);
-                    actionBox.appendChild(showJoin);
     
                     downloadExcel.textContent = '下载参加会议人员信息Excel';
                     downloadExcel.onclick = downloadJoinExcel;
-    
-                    showJoin.textContent = '查看参加会议人员信息';
-                    showJoin.onclick = function() {location.href = showJoinUrl};
 
                     actionBox.style.display = 'block';
     
