@@ -391,7 +391,7 @@ public class MeetingController {
             JSONObject data = new JSONObject();
             User user = meetingService.loadMeetingById(id).getHoldUser();
             data.put("id", user.getId());
-            data.put("username", user.getName());
+            data.put("username", user.getUsername());
 
             response.put("status", 1);
             response.put("message", "Get meeting hold user info success");
