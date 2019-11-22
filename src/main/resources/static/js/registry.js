@@ -52,7 +52,6 @@ function registry() {
     })
     .then(response => response.json())
     .then(function(json) {
-        console.log(json.status);
         if (json.status === 1) {
             window.location.href = '/login.html';
         } else {
